@@ -20,15 +20,11 @@ High-performance virtual scrolling for vanilla JavaScript. Only the visible item
 
 100,000 rows scrolling smoothly - only the visible rows are ever in the DOM.
 
-<video src="https://github.com/html-code-generator/hcg-virtual-scroll/raw/main/hcg-virtual-scroll-demo.mp4" controls muted playsinline width="100%"></video>
-
-> [Watch the demo video](https://github.com/html-code-generator/hcg-virtual-scroll/raw/main/hcg-virtual-scroll-demo.mp4)
+![hcg-virtual-scroll - smooth scrolling of 100,000 rows with no lag](https://raw.githubusercontent.com/html-code-generator/hcg-virtual-scroll/main/hcg-virtual-scroll-demo.gif)
 
 The same scroll with a live counter - the rendered element count stays around 10 no matter how far you scroll.
 
-<video src="https://github.com/html-code-generator/hcg-virtual-scroll/raw/main/hcg-virtual-scroll-dom-nodes-demo.mp4" controls muted playsinline width="100%"></video>
-
-> [Watch the DOM node count video](https://github.com/html-code-generator/hcg-virtual-scroll/raw/main/hcg-virtual-scroll-dom-nodes-demo.mp4)
+![hcg-virtual-scroll - DOM node count stays near 10 while scrolling 100,000 rows](https://raw.githubusercontent.com/html-code-generator/hcg-virtual-scroll/main/hcg-virtual-scroll-dom-nodes-demo.gif)
 
 ---
 
