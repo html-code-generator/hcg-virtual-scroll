@@ -1,0 +1,60 @@
+{
+  "name": "hcg-virtual-scroll",
+  "version": "1.0.1",
+  "description": "High-performance virtual scrolling for vanilla JavaScript. Render 1,000,000+ list items smoothly with no framework and no dependencies. Supports fixed and dynamic row heights, DOM recycling, infinite scroll, and chat/reverse mode.",
+  "main": "hcg-virtual-scroll.js",
+  "module": "hcg-virtual-scroll.js",
+  "unpkg": "hcg-virtual-scroll.min.js",
+  "jsdelivr": "hcg-virtual-scroll.min.js",
+  "style": "hcg-virtual-scroll.css",
+  "exports": {
+    ".": {
+      "import": "./hcg-virtual-scroll.js",
+      "require": "./hcg-virtual-scroll.js",
+      "default": "./hcg-virtual-scroll.js"
+    },
+    "./min": "./hcg-virtual-scroll.min.js",
+    "./hcg-virtual-scroll.css": "./hcg-virtual-scroll.css",
+    "./hcg-virtual-scroll.min.css": "./hcg-virtual-scroll.min.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "hcg-virtual-scroll.js",
+    "hcg-virtual-scroll.min.js",
+    "hcg-virtual-scroll.css",
+    "hcg-virtual-scroll.min.css",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "virtual-scroll",
+    "virtual-scrolling",
+    "virtualization",
+    "dom-virtualization",
+    "infinite-scroll",
+    "large-list",
+    "big-list",
+    "scroll",
+    "list",
+    "table",
+    "performance",
+    "vanilla-js",
+    "javascript",
+    "no-dependencies",
+    "dom-recycling"
+  ],
+  "author": "HTML Code Generator (https://www.html-code-generator.com/)",
+  "license": "MIT",
+  "homepage": "https://www.html-code-generator.com/javascript/virtual-scrolling",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/html-code-generator/hcg-virtual-scroll.git"
+  },
+  "bugs": {
+    "url": "https://github.com/html-code-generator/hcg-virtual-scroll/issues"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=12"
+  }
+}

@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hcg-virtual-scroll - Demo</title>
+  <link rel="stylesheet" href="hcg-virtual-scroll.css" />
+  <style>
+    .demo-code { margin-top: 12px; }
+    .demo-code summary {
+      cursor: pointer;
+      font-size: 0.8rem;
+      color: #2563eb;
+      user-select: none;
+      margin-bottom: 6px;
+    }
+    .demo-code summary:hover { text-decoration: underline; }
+    .demo-code pre {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 0.8rem;
+      font-family: monospace;
+      line-height: 1.6;
+      overflow-x: auto;
+      margin: 0;
+      white-space: pre;
+    }
+    .top-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0 0 28px;
+    }
+    .top-links a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      color: #1f2937;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      transition: border-color .15s, color .15s;
+    }
+    .top-links a:hover { border-color: #2563eb; color: #2563eb; }
+    .top-links a .ico { font-size: 1rem; line-height: 1; }
+
+    .toc {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 18px 22px;
+      margin: 0 0 32px;
+    }
+    .toc h2 {
+      font-size: 0.95rem;
+      margin: 0 0 12px;
+      color: #1f2937;
+    }
+    .toc ol {
+      margin: 0;
+      padding-left: 20px;
+      columns: 2;
+      column-gap: 32px;
+    }
+    .toc li { margin: 5px 0; break-inside: avoid; }
+    .toc a {
+      color: #2563eb;
+      text-decoration: none;
+      font-size: 0.88rem;
+    }
+    .toc a:hover { text-decoration: underline; }
+    .demo-section { scroll-margin-top: 16px; }
+    @media (max-width: 640px) { .toc ol { columns: 1; } }
+  </style>
+</head>
+<body>
+
+<h1>JavaScript Virtual Scrolling - Live Demos</h1>
+<p class="subtitle">Interactive examples of hcg-virtual-scroll, a high-performance vanilla JavaScript virtual scrolling library that renders 1,000,000+ list items smoothly with no framework and no dependencies. Scroll any demo below and only the visible rows stay in the DOM - open your browser DevTools to watch the element count stay small while you scroll.</p>
+
+<nav class="top-links">
+  <a href="https://www.npmjs.com/package/hcg-virtual-scroll" target="_blank" rel="noopener">
+    <svg class="ico" width="15" height="15" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M0 0v24h24V0H0zm19.2 19.2H4.8V4.8h14.4v14.4zM8 8v8h4v-6h2v6h2V8H8z"></path></svg> npm
+  </a>
+  <a href="https://github.com/html-code-generator/hcg-virtual-scroll" target="_blank" rel="noopener">
+    <svg class="ico" width="15" height="15" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.34-3.369-1.34-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"></path></svg> GitHub
+  </a>
+  <a href="https://www.html-code-generator.com/javascript/virtual-scrolling" target="_blank" rel="noopener">
+    <svg class="ico" width="15" height="15" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm6.93 6h-2.95a15.65 15.65 0 0 0-1.38-3.56A8.03 8.03 0 0 1 18.92 8zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56A7.99 7.99 0 0 1 5.08 16zm2.95-8H5.08a7.99 7.99 0 0 1 4.33-3.56A15.65 15.65 0 0 0 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95a8.03 8.03 0 0 1-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"></path></svg> Documentation
+  </a>
+</nav>
+
+<nav class="toc">
+  <h2>Demos on this page</h2>
+  <ol>
+    <li><a href="#demo-fixed-height">Fixed Height List</a></li>
+    <li><a href="#demo-dynamic-height">Dynamic Row Heights</a></li>
+    <li><a href="#demo-dom-recycling">DOM Recycling with keyField</a></li>
+    <li><a href="#demo-updateconfig">Change Options at Runtime</a></li>
+    <li><a href="#demo-infinite-scroll">Infinite Scroll</a></li>
+    <li><a href="#demo-onreachend">onReachEnd Trigger Inspector</a></li>
+    <li><a href="#demo-chat">Chat / Reverse Mode</a></li>
+    <li><a href="#demo-table">Virtual Scrolling Table</a></li>
+    <li><a href="#demo-search">Live Search Filtering</a></li>
+  </ol>
+</nav>
+
+<!-- =
+     DEMO 1 - Fixed height, 10 000 rows
+= -->
+<section class="demo-section" id="demo-fixed-height">
+  <h2>Demo 1: Fixed Height List - 10,000 Rows</h2>
+  <p class="demo-desc">The most common virtual scrolling setup. Every row shares the same height, so the library calculates positions instantly. This example holds 10,000 rows but keeps only the visible ones in the DOM, so scrolling stays smooth no matter how large the list grows.</p>
+  <p class="demo-meta">10 000 rows · itemHeight: 50 · bufferSize: 3 · adaptiveOverscan: true</p>
+
+  <div class="stats-bar">
+    <span>Scroll: <b id="s1-scroll">0</b>px</span>
+    <span>Visible: <b id="s1-start">-</b> - <b id="s1-end">-</b></span>
+    <span>DOM nodes: <b id="s1-dom">-</b></span>
+  </div>
+
+  <div class="controls">
+    <input type="number" id="s1-idx" placeholder="Index" min="0" max="9999" />
+    <button class="primary" onclick="s1ScrollTo()">scrollTo(index)</button>
+    <button onclick="s1Top()">scrollToTop()</button>
+    <button onclick="s1Bottom()">scrollToBottom()</button>
+    <button onclick="s1Range()">getVisibleRange()</button>
+  </div>
+
+  <div id="list1" class="scroll-list"></div>
+
+  <details class="demo-code">
+    <summary>View Code</summary>
+    <pre>const vs = new HCGVirtualScroll(data, {
+  container:        '#list1',
+  itemHeight:       50,
+  bufferSize:       3,
+  adaptiveOverscan: true,
+
+  renderItem(item, i) {
+    return `&lt;div class="row"&gt;
+      &lt;span&gt;#${i}&lt;/span&gt;
+      &lt;span&gt;${item.name}&lt;/span&gt;
+      &lt;span class="badge"&gt;${item.badge}&lt;/span&gt;
+    &lt;/div&gt;`;
+  },
+
+  onScroll(scrollTop, { start, end }) {
+    console.log('scroll:', scrollTop, 'visible:', start, '-', end);
+  },
+});</pre>
+  </details>
+</section>
+
+<!-- =
+     DEMO 2 - Dynamic height, 5 000 rows
+= -->
+<section class="demo-section" id="demo-dynamic-height">
+  <h2>Demo 2: Dynamic Row Heights</h2>
+  <p class="demo-desc">When rows vary in height - cards, multi-line text, or expandable items - pass a function to itemHeight. Each item's height is pre-calculated, so the library positions variable-height rows correctly without measuring the DOM during scroll.</p>
+  <p class="demo-meta">5 000 rows · itemHeight: function · heights 44 - 96 px</p>
+
+  <div class="stats-bar">
+    <span>Scroll: <b id="s2-scroll">0</b>px</span>
+    <span>Visible: <b id="s2-start">-</b> - <b id="s2-end">-</b></span>
+    <span>DOM nodes: <b id="s2-dom">-</b></span>
+  </div>
+
+  <div class="controls">
+    <input type="number" id="s2-idx" placeholder="Index" min="0" max="4999" />
+    <button class="primary" onclick="s2ScrollTo()">scrollTo(index)</button>
+    <button onclick="s2Top()">scrollToTop()</button>
+    <button onclick="s2Bottom()">scrollToBottom()</button>
+    <button onclick="s2Update()">updateData (reload)</button>
+    <button class="danger" onclick="s2Clear()">clear()</button>
+  </div>
+
+  <div id="list2" class="scroll-list"></div>
+
+  <details class="demo-code">
+    <summary>View Code</summary>
+    <pre>// each item has a pre-calculated height property
+const data = items.map(item => ({
+  ...item,
+  height: item.body.length &gt; 80 ? 96 : 44,
+}));
+
+const vs = new HCGVirtualScroll(data, {
+  container:           '#list2',
+  itemHeight:          item => item.height,  // function per item
+  estimatedItemHeight: 60,                   // fallback
+  bufferSize:          4,
+
+  renderItem(item) {
+    return `&lt;div style="height:${item.height}px"&gt;
+      &lt;strong&gt;${item.title}&lt;/strong&gt;
+      &lt;p&gt;${item.body}&lt;/p&gt;
+    &lt;/div&gt;`;
+  },
+});</pre>
+  </details>
+</section>
+
+<!-- =
+     DEMO 3 - DOM Recycling with keyField
+= -->
+<section class="demo-section" id="demo-dom-recycling">
+  <h2>Demo 3: DOM Recycling with keyField <span class="tag">keyField</span></h2>
+  <p class="demo-desc">Set keyField to a unique property and the library reuses existing DOM nodes instead of recreating them on every scroll. This preserves checkbox state, focus, and input values. Tick a few boxes, scroll away, then scroll back - the state is kept.</p>
+  <p class="demo-meta">1 000 cards · keyField: "id" · check items then scroll away and back - checkboxes are preserved</p>
+
+  <div class="stats-bar">
+    <span>Scroll: <b id="s3-scroll">0</b>px</span>
+    <span>Visible: <b id="s3-start">-</b> - <b id="s3-end">-</b></span>
+    <span>DOM nodes: <b id="s3-dom">-</b></span>
+    <span>Checked: <b id="s3-checked">0</b></span>
+  </div>
+
+  <div class="controls">
+    <input type="number" id="s3-idx" placeholder="Index" min="0" max="999" />
+    <button class="primary" onclick="s3ScrollTo()">scrollTo(index)</button>
+    <button onclick="s3Top()">scrollToTop()</button>
+    <button onclick="s3Bottom()">scrollToBottom()</button>
+    <button onclick="s3CountChecked()">count checked</button>
+    <button class="danger" onclick="s3UncheckAll()">uncheck all</button>
+  </div>
+
+  <div id="list3" class="scroll-list"></div>
+
+  <details class="demo-code">
+    <summary>View Code</summary>
+    <pre>const data = makeItems(1000);  // each item: { id, name, ... }
+
+const vs = new HCGVirtualScroll(data, {
+  container:  '#list3',
+  itemHeight: 72,
+  keyField:   'id',   // enables DOM recycling - reuses existing elements
+
+  renderItem(item) {
+    // item.checked stored on data object - survives scrolling out of buffer
+    return `&lt;div class="row"&gt;
+      &lt;input type="checkbox" ${item.checked ? 'checked' : ''} class="item-cb" /&gt;
+      &lt;span&gt;${item.name}&lt;/span&gt;
+    &lt;/div&gt;`;
+  },
+});
+
+// event delegation - update item.checked directly on the data object by index
+document.getElementById('list3').addEventListener('change', function (e) {
+  if (!e.target.classList.contains('item-cb')) return;
+  const row = e.target.closest('[data-vs-key]');
+  if (!row) return;
+  const id = parseInt(row.dataset.vsKey, 10);
+  data[id].checked = e.target.checked;  // write state back to data
+});
+
+// uncheck all - reset data then refresh DOM
+function uncheckAll() {
+  data.forEach(item =&gt; item.checked = false);
+  vs.refresh();
+}</pre>
+  </details>
+</section>
+
+<!-- =
+     DEMO 4 - updateConfig() live hot-swap
+= -->
+<section class="demo-section" id="demo-updateconfig">
+  <h2>Demo 4: Change Options at Runtime with updateConfig()</h2>
+  <p class="demo-desc">Update any option - row height, render function, or buffer size - without destroying and recreating the instance. The list re-renders instantly with the new settings, making it easy to switch layouts or view modes on the fly.</p>
+  <p class="demo-meta">2 000 rows · change itemHeight / renderItem without re-creating the instance</p>
+
+  <div class="stats-bar">
+    <span>Scroll: <b id="s4-scroll">0</b>px</span>
+    <span>Visible: <b id="s4-start">-</b> - <b id="s4-end">-</b></span>
+    <span>DOM nodes: <b id="s4-dom">-</b></span>
+  </div>
+
+  <div class="controls">
+    <button onclick="s4Compact()">itemHeight → 36</button>
+    <button onclick="s4Normal()">itemHeight → 60</button>
+    <button onclick="s4Large()">itemHeight → 90</button>
+    <button class="primary" onclick="s4ToggleRender()">toggle renderItem</button>
+    <button onclick="s4Refresh()">refresh()</button>
+  </div>
+
+  <div id="list4" class="scroll-list"></div>
+
+  <details class="demo-code">
+    <summary>View Code</summary>
+    <pre>const vs = new HCGVirtualScroll(data, {
+  container:  '#list4',
+  itemHeight: 60,
+  renderItem: renderDefault,
+});
+
+// change item height at runtime - no re-create needed
+vs.updateConfig({ itemHeight: 36 });
+vs.updateConfig({ itemHeight: 90 });
+
+// swap the render function completely
+vs.updateConfig({ renderItem: renderCompact });
+
+// change multiple options at once
+vs.updateConfig({ bufferSize: 8, adaptiveOverscan: false });</pre>
+  </details>
+</section>
+
+<!-- =
+     DEMO 5 - Infinite Scroll (onReachEnd + append)
+= -->
+<section class="demo-section" id="demo-infinite-scroll">
+  <h2>Demo 5: Infinite Scroll - Load More on Demand <span class="tag">onReachEnd · append()</span></h2>
+  <p class="demo-desc">Use the onReachEnd callback to fetch and append more items as the user nears the bottom - the standard pattern for feeds, search results, and product listings. This demo simulates a 600 ms network request and loads 30 rows per batch.</p>
+  <p class="demo-meta">Starts with 50 items · loads 30 more when near the end · simulated 600 ms network delay</p>
+
+  <div class="stats-bar">
+    <span>Scroll: <b id="s5-scroll">0</b>px</span>
+    <span>Visible: <b id="s5-start">-</b> - <b id="s5-end">-</b></span>
+    <span>Total items: <b id="s5-total">50</b></span>
+    <span>Batches: <b id="s5-batches">0</b></span>
+    <span id="s5-loading" class="loading-badge" style="display:none">Loading…</span>
+  </div>
+
+  <div class="controls">
+    <button class="primary" onclick="s5AppendNow()">append 30 now</button>
+    <button onclick="s5Top()">scrollToTop()</button>
+    <button onclick="s5Bottom()">scrollToBottom()</button>
+    <button class="danger" onclick="s5Reset()">reset</button>
+  </div>
+
+  <div id="list5" class="scroll-list"></div>
+
+  <details class="demo-code">
+    <summary>View Code</summary>
+    <pre>let loading = false;
+
+const vs = new HCGVirtualScroll(initialData, {
+  container:         '#list5',
+  itemHeight:        56,
+  reachEndThreshold: 8,   // fire when 8 items from the end
+  renderItem: (item, i) => `&lt;div class="row"&gt;#${i} ${item.name}&lt;/div&gt;`,
+
+  onReachEnd({ total }) {
+    if (loading) return;  // prevent duplicate requests
+    loading = true;
+
+    fetchNextPage(total).then(batch => {
+      vs.append(batch);   // append preserves scroll position
+      loading = false;
+    });
+  },
+});</pre>
+  </details>
+</section>
+
+<!-- =
+     DEMO 7 - onReachEnd Trigger Inspector
+= -->
+<section class="demo-section" id="demo-onreachend">
+  <h2>Demo 7: onReachEnd Trigger Inspector <span class="tag">onReachEnd</span></h2>
+  <p class="demo-desc">See exactly when the onReachEnd callback fires. Adjust the threshold and watch the event log record each trigger as you scroll toward the end - useful for tuning when infinite-scroll loading should begin.</p>
+  <p class="demo-meta">100 items · scroll near the bottom to fire the trigger · watch the event log</p>
+
+  <div class="stats-bar">
+    <span>Scroll: <b id="s7-scroll">0</b>px</span>
+    <span>Visible: <b id="s7-start">-</b> - <b id="s7-end">-</b></span>
+    <span>Total: <b id="s7-total">100</b></span>
+    <span>Threshold: <b id="s7-thresh">5</b> items</span>
+    <span>Triggers: <b id="s7-count">0</b></span>
+  </div>
+
+  <div class="controls">
+    <button onclick="s7SetThresh(3)">threshold → 3</button>
+    <button onclick="s7SetThresh(5)">threshold → 5</button>
+    <button onclick="s7SetThresh(15)">threshold → 15</button>
+    <button onclick="s7Bottom()">scrollToBottom()</button>
+    <button onclick="s7Top()">scrollToTop()</button>
+    <button class="danger" onclick="s7Reset()">reset</button>
+    <button onclick="s7ClearLog()">clear log</button>
+  </div>
+
+  <div style="display:flex;gap:12px">
+    <div id="list7" class="scroll-list" style="flex:1"></div>
+    <div id="s7-log" style="width:280px;height:360px;overflow-y:auto;border:1px solid #ddd;border-radius:8px;background:#fafafa;padding:8px;font-size:0.75rem;font-family:monospace;color:#333">
+      <div style="color:#aaa;text-align:center;margin-top:120px">Scroll near the bottom<br>to fire onReachEnd</div>
+    </div>
+  </div>
+
+  <details class="demo-code">
+    <summary>View Code</summary>
+    <pre>const vs = new HCGVirtualScroll(data, {
+  container:         '#list7',
+  itemHeight:        50,
+  reachEndThreshold: 5,   // fires when last 5 items become visible
+  renderItem: (item, i) => `&lt;div class="row"&gt;${i} - ${item.name}&lt;/div&gt;`,
+
+  onReachEnd({ start, end, total }) {
+    // fires once per approach - resets when user scrolls back up
+    console.log('Reached end', { start, end, total });
+  },
+});
+
+// change threshold at runtime
+vs.updateConfig({ reachEndThreshold: 15 });</pre>
+  </details>
+</section>
+
+<!-- =
+     DEMO 6 - Chat Mode (reverse + prepend + onReachStart)
+= -->
+<section class="demo-section" id="demo-chat">
+  <h2>Demo 6: Chat / Reverse Mode <span class="tag">reverse · prepend() · onReachStart</span></h2>
+  <p class="demo-desc">Set reverse: true to anchor the list to the bottom, just like a chat window or activity feed. New messages appear at the bottom and the view stays pinned, while scrolling to the top loads older history with prepend().</p>
+  <p class="demo-meta">reverse: true · anchored to bottom · scroll to top to load older messages</p>
+
+  <div class="stats-bar">
+    <span>Messages: <b id="s6-total">0</b></span>
+    <span>Visible: <b id="s6-start">-</b> - <b id="s6-end">-</b></span>
+    <span id="s6-loading" class="loading-badge" style="display:none">Loading history…</span>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="s6-input" placeholder="Type a message…" style="flex:1;padding:5px 10px;border:1px solid #ccc;border-radius:6px;font-size:.85rem" />
+    <button class="primary" onclick="s6Send()">Send</button>
+    <button onclick="s6BotReply()">Bot reply</button>
+    <button onclick="s6LoadHistory()">load history</button>
+  </div>
+
+  <div id="list6" class="scroll-list chat-list"></div>
+
+  <details class="demo-code">
+    <summary>View Code</summary>
+    <pre>const vs = new HCGVirtualScroll(messages, {
+  container:           '#list6',
+  itemHeight:          msg => msg.height,
+  estimatedItemHeight: 74,
+  reverse:             true,   // anchor to bottom
+
+  renderItem(msg) {
+    const isMe = msg.author === 'me';
+    return `&lt;div class="chat-row ${isMe ? 'me' : 'bot'}"&gt;
+      &lt;div class="bubble"&gt;${msg.text}&lt;/div&gt;
+    &lt;/div&gt;`;
+  },
+
+  onReachStart() {
+    // user scrolled to top - load older history
+    loadHistory().then(older => vs.prepend(older));
+  },
+});
+
+// send a new message - auto-scrolls if user is at bottom
+vs.append([{ id: Date.now(), author: 'me', text: 'Hello!', height: 54 }]);</pre>
+  </details>
+</section>
+
+<!-- =
+     DEMO 8 - TABLE rendering
+= -->
+<section class="demo-section" id="demo-table">
+  <h2>Demo 8: Virtual Scrolling Table - 100,000 Rows <span class="tag">TABLE container</span></h2>
+  <p class="demo-desc">Render a large data table with a sticky header and aligned columns. Each row is a small table that shares the header's fixed column widths, so the layout stays consistent while only the visible rows are rendered - letting a 100,000-row table scroll smoothly.</p>
+  <p class="demo-meta">100 000 rows · sticky header · column widths kept in sync with table-layout: fixed</p>
+
+  <div class="stats-bar">
+    <span>Scroll: <b id="s8-scroll">0</b>px</span>
+    <span>Visible: <b id="s8-start">-</b> - <b id="s8-end">-</b></span>
+    <span>DOM nodes: <b id="s8-dom">-</b></span>
+    <span>Total rows: <b id="s8-total">100000</b></span>
+  </div>
+
+  <div class="controls">
+    <input type="number" id="s8-idx" placeholder="Row index" min="0" max="99999" />
+    <button class="primary" onclick="s8ScrollTo()">scrollTo(index)</button>
+    <button onclick="s8Top()">scrollToTop()</button>
+    <button onclick="s8Bottom()">scrollToBottom()</button>
+  </div>
+
+  <!-- Header table sits ABOVE the scroll container - same fixed column widths -->
+  <table style="width:100%;border-collapse:collapse;table-layout:fixed;">
+    <thead style="background:#f9fafb;">
+      <tr>
+        <th style="width:80px;padding:10px 14px;text-align:left;border-bottom:2px solid #e5e7eb">ID</th>
+        <th style="padding:10px 14px;text-align:left;border-bottom:2px solid #e5e7eb">Name</th>
+        <th style="padding:10px 14px;text-align:left;border-bottom:2px solid #e5e7eb">Email</th>
+        <th style="width:110px;padding:10px 14px;text-align:left;border-bottom:2px solid #e5e7eb">Status</th>
+      </tr>
+    </thead>
+  </table>
+
+  <!-- The library mounts on THIS element - it is the one that scrolls -->
+  <div id="list8" class="scroll-list"></div>
+
+  <details class="demo-code">
+    <summary>View Code</summary>
+    <pre>&lt;!-- header table sits ABOVE the scroll container --&gt;
+&lt;table style="width:100%;table-layout:fixed;"&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th style="width:80px"&gt;ID&lt;/th&gt;&lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Email&lt;/th&gt;&lt;th style="width:110px"&gt;Status&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+&lt;/table&gt;
+
+&lt;!-- the scroll container the library mounts on --&gt;
+&lt;div id="list8" style="height:400px;overflow-y:auto;"&gt;&lt;/div&gt;
+
+const vs = new HCGVirtualScroll(rows, {
+  container:  '#list8',
+  itemHeight: 44,
+
+  // each row is a mini-table using the SAME fixed column widths as the header
+  renderItem(item) {
+    return `&lt;table style="width:100%;table-layout:fixed;"&gt;&lt;tbody&gt;&lt;tr&gt;
+      &lt;td style="width:80px"&gt;${item.id}&lt;/td&gt;
+      &lt;td&gt;${item.name}&lt;/td&gt;
+      &lt;td&gt;${item.email}&lt;/td&gt;
+      &lt;td style="width:110px"&gt;${item.status}&lt;/td&gt;
+    &lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;`;
+  },
+});</pre>
+  </details>
+</section>
+
+<!-- =
+     DEMO 9 - Live Search Results (filter + updateData)
+= -->
+<section class="demo-section" id="demo-search">
+  <h2>Demo 9: Live Search Filtering <span class="tag">updateData()</span></h2>
+  <p class="demo-desc">Filter a 50,000-row list as you type. On each keystroke a new filtered array is passed to updateData(), and the list re-renders instantly. When nothing matches, the built-in empty state is shown.</p>
+  <p class="demo-meta">50 000 rows · type to filter · pass a new array to updateData on every keystroke</p>
+
+  <div class="stats-bar">
+    <span>Query: <b id="s9-query">(none)</b></span>
+    <span>Matches: <b id="s9-matches">50000</b></span>
+    <span>Visible: <b id="s9-start">-</b> - <b id="s9-end">-</b></span>
+    <span>DOM nodes: <b id="s9-dom">-</b></span>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="s9-input" placeholder="Search by name or email…" style="flex:1;padding:6px 12px;border:1px solid #ccc;border-radius:6px;font-size:.85rem" />
+    <button class="danger" onclick="s9Clear()">clear</button>
+  </div>
+
+  <div id="list9" class="scroll-list"></div>
+
+  <details class="demo-code">
+    <summary>View Code</summary>
+    <pre>const allItems = makeItems(50000);   // the full, unfiltered dataset
+
+const vs = new HCGVirtualScroll(allItems, {
+  container:  '#list9',
+  itemHeight: 50,
+  emptyText:  'No matches found',
+  renderItem: renderRow,
+});
+
+// filter a NEW array on every keystroke - never mutate allItems
+searchInput.addEventListener('input', function (e) {
+  const q = e.target.value.toLowerCase();
+  const filtered = allItems.filter(function (item) {
+    return item.name.toLowerCase().indexOf(q) &gt; -1
+        || item.email.toLowerCase().indexOf(q) &gt; -1;
+  });
+  vs.updateData(filtered);   // empty result shows the emptyText state
+});</pre>
+  </details>
+</section>
+
+<script src="hcg-virtual-scroll.js"></script>
+<script>
+// - Shared helpers -
+const COLORS = ['#6366f1','#10b981','#f59e0b','#ef4444','#3b82f6','#8b5cf6','#ec4899'];
+const BADGES = [['Active','badge-green'],['Pending','badge-blue'],['Hot','badge-orange'],['VIP','badge-purple']];
+const NAMES  = ['Alice','Bob','Carol','David','Eve','Frank','Grace','Heidi','Ivan','Judy'];
+const SUBS   = ['Engineer','Designer','Manager','Analyst','Director','Consultant','Architect'];
+const BOT_MSGS = [
+  'Sure, sounds good!', 'Let me check that for you.', 'Got it, thanks!',
+  'Can you clarify what you mean?', 'On it!', 'That looks correct to me.',
+  'Interesting - tell me more.', 'Done!', 'I agree.', 'Not sure about that one.',
+];
+
+function rand(n)   { return Math.floor(Math.random() * n); }
+function pick(arr) { return arr[rand(arr.length)]; }
+function initials(name) { return name.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2); }
+function domCount(id) { return document.querySelector('#' + id + ' .hcg-vs-content')?.children.length ?? 0; }
+function timeStr()  { return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }
+
+// - Dataset generators -
+function makeBasicItems(n, startId = 0) {
+  return Array.from({ length: n }, (_, i) => ({
+    id:    startId + i,
+    name:  `${pick(NAMES)} ${pick(NAMES)}`,
+    badge: BADGES[rand(BADGES.length)],
+  }));
+}
+
+function makeDynamicItems(n) {
+  const heights = [44, 60, 80, 96];
+  return Array.from({ length: n }, (_, i) => {
+    const h     = pick(heights);
+    const lines = Math.round((h - 28) / 16);
+    return {
+      id:     i,
+      title:  `Item #${i} - ${pick(NAMES)} ${pick(NAMES)}`,
+      body:   lines > 0 ? Array.from({ length: lines }, () =>
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit.').join(' ') : '',
+      height: h,
+    };
+  });
+}
+
+function makeCardItems(n) {
+  return Array.from({ length: n }, (_, i) => ({
+    id:    i,
+    name:  `${pick(NAMES)} ${pick(NAMES)}`,
+    sub:   `${pick(SUBS)} · ID #${1000 + i}`,
+    color: COLORS[rand(COLORS.length)],
+    score: (Math.random() * 10).toFixed(1),
+    badge: BADGES[rand(BADGES.length)],
+  }));
+}
+
+function makeConfigItems(n) {
+  return Array.from({ length: n }, (_, i) => ({
+    id: i, label: `Row #${i} - ${pick(NAMES)} ${pick(NAMES)}`,
+  }));
+}
+
+function makeChatMessage(id, author, text) {
+  const lines = Math.ceil(text.length / 45);
+  return { id, author, text, time: timeStr(), height: 54 + lines * 20 };
+}
+
+function makeHistoryMessages(n, beforeId) {
+  const texts = [
+    'Hey, how are you?', 'Did you see the latest update?', 'Can we reschedule?',
+    'Sounds great!', 'What do you think about this approach?', 'Almost done with it.',
+    'Let me know when you are free.', 'Check out this link!', 'Thanks for the help.',
+    'I will follow up tomorrow.', 'Agreed.', 'That works for me.',
+  ];
+  return Array.from({ length: n }, (_, i) => {
+    const text = pick(texts);
+    return makeChatMessage(beforeId - n + i, pick(['me', 'bot']), text);
+  });
+}
+
+// - DEMO 1 - Fixed height -
+const items1 = makeBasicItems(10_000);
+
+const vs1 = new HCGVirtualScroll(items1, {
+  container:       '#list1',
+  itemHeight:      50,
+  bufferSize:      3,
+  adaptiveOverscan: true,
+  ariaLabel:       'Fixed height list',
+
+  renderItem(item, i) {
+    const [label, cls] = item.badge;
+    return `<div class="hcg-vs-item-basic">
+      <span class="idx">#${i}</span>
+      <span class="name">${item.name}</span>
+      <span class="badge ${cls}">${label}</span>
+    </div>`;
+  },
+
+  onScroll(scrollTop, range) {
+    document.getElementById('s1-scroll').textContent = Math.round(scrollTop);
+    document.getElementById('s1-start').textContent  = range.start;
+    document.getElementById('s1-end').textContent    = range.end;
+    document.getElementById('s1-dom').textContent    = domCount('list1');
+  },
+});
+
+document.getElementById('s1-dom').textContent = domCount('list1');
+const r1 = vs1.getVisibleRange();
+document.getElementById('s1-start').textContent = r1.start;
+document.getElementById('s1-end').textContent   = r1.end;
+
+function s1ScrollTo() {
+  const idx = parseInt(document.getElementById('s1-idx').value, 10);
+  if (!isNaN(idx)) vs1.scrollTo(idx);
+}
+function s1Top()    { vs1.scrollToTop(); }
+function s1Bottom() { vs1.scrollToBottom(true); }
+function s1Range()  {
+  const r = vs1.getVisibleRange();
+  alert(`getVisibleRange() → start: ${r.start}, end: ${r.end}`);
+}
+
+// - DEMO 2 - Dynamic height -
+let items2 = makeDynamicItems(5_000);
+
+const vs2 = new HCGVirtualScroll(items2, {
+  container:  '#list2',
+  itemHeight: item => item.height,
+  bufferSize: 4,
+
+  renderItem(item) {
+    return `<div class="hcg-vs-item-dynamic">
+      <div class="title">${item.title}</div>
+      ${item.body ? `<div class="body">${item.body}</div>` : ''}
+    </div>`;
+  },
+
+  onScroll(scrollTop, range) {
+    document.getElementById('s2-scroll').textContent = Math.round(scrollTop);
+    document.getElementById('s2-start').textContent  = range.start;
+    document.getElementById('s2-end').textContent    = range.end;
+    document.getElementById('s2-dom').textContent    = domCount('list2');
+  },
+
+  onVisibleRangeChange({ start, end }) {
+    console.log('[Demo 2] onVisibleRangeChange →', { start, end });
+  },
+});
+
+document.getElementById('s2-dom').textContent = domCount('list2');
+const r2 = vs2.getVisibleRange();
+document.getElementById('s2-start').textContent = r2.start;
+document.getElementById('s2-end').textContent   = r2.end;
+
+function s2ScrollTo() {
+  const idx = parseInt(document.getElementById('s2-idx').value, 10);
+  if (!isNaN(idx)) vs2.scrollTo(idx, true);
+}
+function s2Top()    { vs2.scrollToTop(true); }
+function s2Bottom() { vs2.scrollToBottom(true); }
+function s2Update() { items2 = makeDynamicItems(5_000); vs2.updateData(items2); }
+function s2Clear() {
+  vs2.clear();
+  ['s2-dom','s2-start','s2-end'].forEach(id =>
+    document.getElementById(id).textContent = id === 's2-dom' ? 0 : '-');
+}
+
+// - DEMO 3 - DOM Recycling with keyField -
+const items3 = makeCardItems(1_000);
+
+const vs3 = new HCGVirtualScroll(items3, {
+  container:  '#list3',
+  itemHeight: 72,
+  bufferSize: 3,
+  keyField:   'id',
+  ariaLabel:  'Recyclable card list',
+
+  renderItem(item) {
+    // item.checked stored on the data object - survives scrolling out of buffer
+    return `<div class="hcg-vs-item-check">
+      <input type="checkbox" class="item-cb" title="Mark item" ${item.checked ? 'checked' : ''} />
+      <div class="avatar-sm" style="background:${COLORS[item.id % COLORS.length]}">${initials(item.name)}</div>
+      <div class="check-info">
+        <div class="check-name">${item.name}</div>
+        <div class="check-sub">${item.sub}</div>
+      </div>
+      <span class="badge ${item.badge[1]}">${item.badge[0]}</span>
+    </div>`;
+  },
+
+  onScroll(scrollTop, range) {
+    document.getElementById('s3-scroll').textContent = Math.round(scrollTop);
+    document.getElementById('s3-start').textContent  = range.start;
+    document.getElementById('s3-end').textContent    = range.end;
+    document.getElementById('s3-dom').textContent    = domCount('list3');
+  },
+});
+
+// event delegation - update item.checked directly on the data object by index
+document.getElementById('list3').addEventListener('change', function (e) {
+  if (!e.target.classList.contains('item-cb')) return;
+  const row = e.target.closest('[data-vs-key]');
+  if (!row) return;
+  const id = parseInt(row.dataset.vsKey, 10);
+  items3[id].checked = e.target.checked;
+  document.getElementById('s3-checked').textContent = items3.filter(item => item.checked).length;
+});
+
+document.getElementById('s3-dom').textContent = domCount('list3');
+const r3 = vs3.getVisibleRange();
+document.getElementById('s3-start').textContent = r3.start;
+document.getElementById('s3-end').textContent   = r3.end;
+
+function s3ScrollTo() {
+  const idx = parseInt(document.getElementById('s3-idx').value, 10);
+  if (!isNaN(idx)) vs3.scrollTo(idx, true);
+}
+function s3Top()    { vs3.scrollToTop(true); }
+function s3Bottom() { vs3.scrollToBottom(true); }
+function s3CountChecked() {
+  const n = items3.filter(item => item.checked).length;
+  document.getElementById('s3-checked').textContent = n;
+  alert(`${n} item(s) checked - scroll away and back, they stay checked!`);
+}
+function s3UncheckAll() {
+  // reset state on the data objects, then refresh() forces a fresh render
+  // so visible recycled rows pick up the change immediately
+  items3.forEach(item => item.checked = false);
+  document.getElementById('s3-checked').textContent = 0;
+  vs3.refresh();
+}
+
+// - DEMO 4 - updateConfig() -
+const items4   = makeConfigItems(2_000);
+let   s4Simple = false;
+
+const renderBasic  = (item, i) =>
+  `<div class="hcg-vs-item-basic"><span class="idx">#${i}</span><span class="name">${item.label}</span></div>`;
+
+const renderSimple = (item, i) =>
+  `<div class="hcg-vs-item-basic" style="background:#f0f7ff">
+    <span class="idx" style="color:#2563eb">${i}</span>
+    <span class="name" style="font-family:monospace">${item.label}</span>
+  </div>`;
+
+const vs4 = new HCGVirtualScroll(items4, {
+  container:  '#list4',
+  itemHeight: 60,
+  bufferSize: 3,
+  renderItem: renderBasic,
+
+  onScroll(scrollTop, range) {
+    document.getElementById('s4-scroll').textContent = Math.round(scrollTop);
+    document.getElementById('s4-start').textContent  = range.start;
+    document.getElementById('s4-end').textContent    = range.end;
+    document.getElementById('s4-dom').textContent    = domCount('list4');
+  },
+});
+
+document.getElementById('s4-dom').textContent = domCount('list4');
+const r4 = vs4.getVisibleRange();
+document.getElementById('s4-start').textContent = r4.start;
+document.getElementById('s4-end').textContent   = r4.end;
+
+function s4Compact()      { vs4.updateConfig({ itemHeight: 36 }); }
+function s4Normal()       { vs4.updateConfig({ itemHeight: 60 }); }
+function s4Large()        { vs4.updateConfig({ itemHeight: 90 }); }
+function s4ToggleRender() { s4Simple = !s4Simple; vs4.updateConfig({ renderItem: s4Simple ? renderSimple : renderBasic }); }
+function s4Refresh()      { vs4.refresh(); }
+
+// - DEMO 5 - Infinite Scroll -
+let s5Items    = makeBasicItems(50);
+let s5Loading  = false;
+let s5Batches  = 0;
+
+const vs5 = new HCGVirtualScroll(s5Items, {
+  container:          '#list5',
+  itemHeight:         56,
+  bufferSize:         4,
+  reachEndThreshold:  8,
+
+  renderItem(item, i) {
+    const [label, cls] = item.badge;
+    return `<div class="hcg-vs-item-basic">
+      <span class="idx">#${item.id}</span>
+      <span class="name">${item.name}</span>
+      <span class="badge ${cls}">${label}</span>
+    </div>`;
+  },
+
+  onScroll(scrollTop, range) {
+    document.getElementById('s5-scroll').textContent = Math.round(scrollTop);
+    document.getElementById('s5-start').textContent  = range.start;
+    document.getElementById('s5-end').textContent    = range.end;
+  },
+
+  onReachEnd({ total }) {
+    if (s5Loading) return;
+    s5Loading = true;
+    document.getElementById('s5-loading').style.display = '';
+    setTimeout(() => {
+      const batch = makeBasicItems(30, total);
+      vs5.append(batch);
+      s5Items = vs5.getData();
+      s5Batches++;
+      document.getElementById('s5-total').textContent   = s5Items.length;
+      document.getElementById('s5-batches').textContent = s5Batches;
+      document.getElementById('s5-loading').style.display = 'none';
+      s5Loading = false;
+    }, 600);
+  },
+});
+
+document.getElementById('s5-total').textContent = s5Items.length;
+const r5 = vs5.getVisibleRange();
+document.getElementById('s5-start').textContent = r5.start;
+document.getElementById('s5-end').textContent   = r5.end;
+
+function s5AppendNow() {
+  if (s5Loading) return;
+  const batch = makeBasicItems(30, vs5.getData().length);
+  vs5.append(batch);
+  s5Items = vs5.getData();
+  document.getElementById('s5-total').textContent = s5Items.length;
+}
+function s5Top()    { vs5.scrollToTop(); }
+function s5Bottom() { vs5.scrollToBottom(true); }
+function s5Reset() {
+  s5Items   = makeBasicItems(50);
+  s5Batches = 0;
+  s5Loading = false;
+  vs5.updateData(s5Items);
+  document.getElementById('s5-total').textContent   = s5Items.length;
+  document.getElementById('s5-batches').textContent = 0;
+  document.getElementById('s5-loading').style.display = 'none';
+}
+
+// - DEMO 6 - Chat Mode -
+let s6NextId     = 0;
+let s6HistId     = -1;
+let s6LoadingHist = false;
+
+function makeChatBatch(n, startId, offset = 0) {
+  return Array.from({ length: n }, (_, i) => {
+    const author = (startId + i) % 3 === 0 ? 'me' : 'bot';
+    const text   = author === 'me'
+      ? ['Hello there!', 'How is it going?', 'Can you help me?', 'Sounds great!', 'Thanks!'][rand(5)]
+      : pick(BOT_MSGS);
+    return makeChatMessage(offset + startId + i, author, text);
+  });
+}
+
+// Seed 40 initial messages
+const initMsgs = makeChatBatch(40, 0, 0);
+s6NextId = initMsgs.length;
+s6HistId = 0;
+
+const vs6 = new HCGVirtualScroll(initMsgs, {
+  container:         '#list6',
+  itemHeight:        item => item.height,
+  estimatedItemHeight: 74,
+  bufferSize:        4,
+  reverse:           true,
+
+  renderItem(item) {
+    const isMe = item.author === 'me';
+    return `<div class="chat-row ${isMe ? 'me' : 'bot'}">
+      <div class="chat-bubble ${isMe ? 'bubble-me' : 'bubble-bot'}">
+        <div class="bubble-text">${item.text}</div>
+        <div class="bubble-time">${item.time}</div>
+      </div>
+    </div>`;
+  },
+
+  onScroll(scrollTop, range) {
+    document.getElementById('s6-start').textContent = range.start;
+    document.getElementById('s6-end').textContent   = range.end;
+  },
+
+  onReachStart() {
+    if (s6LoadingHist || s6HistId <= -200) return;
+    s6LoadingHist = true;
+    document.getElementById('s6-loading').style.display = '';
+    setTimeout(() => {
+      const hist = makeChatBatch(20, s6HistId - 20, s6HistId - 20);
+      s6HistId -= 20;
+      vs6.prepend(hist);
+      document.getElementById('s6-total').textContent = vs6.getData().length;
+      document.getElementById('s6-loading').style.display = 'none';
+      s6LoadingHist = false;
+    }, 500);
+  },
+});
+
+document.getElementById('s6-total').textContent = initMsgs.length;
+const r6 = vs6.getVisibleRange();
+document.getElementById('s6-start').textContent = r6.start;
+document.getElementById('s6-end').textContent   = r6.end;
+
+function s6Send() {
+  const input = document.getElementById('s6-input');
+  const text  = input.value.trim();
+  if (!text) return;
+  vs6.append([makeChatMessage(s6NextId++, 'me', text)]);
+  document.getElementById('s6-total').textContent = vs6.getData().length;
+  input.value = '';
+}
+
+function s6BotReply() {
+  vs6.append([makeChatMessage(s6NextId++, 'bot', pick(BOT_MSGS))]);
+  document.getElementById('s6-total').textContent = vs6.getData().length;
+}
+
+function s6LoadHistory() {
+  if (s6LoadingHist) return;
+  s6LoadingHist = true;
+  document.getElementById('s6-loading').style.display = '';
+  setTimeout(() => {
+    const hist = makeChatBatch(20, s6HistId - 20, s6HistId - 20);
+    s6HistId -= 20;
+    vs6.prepend(hist);
+    document.getElementById('s6-total').textContent = vs6.getData().length;
+    document.getElementById('s6-loading').style.display = 'none';
+    s6LoadingHist = false;
+  }, 500);
+}
+
+// Submit on Enter
+document.getElementById('s6-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') s6Send();
+});
+
+// - DEMO 7 - onReachEnd Trigger Inspector -
+let s7Threshold = 5;
+let s7TriggerCount = 0;
+
+function s7LogEvent(data) {
+  const log = document.getElementById('s7-log');
+  // Remove placeholder on first event
+  if (s7TriggerCount === 1) log.innerHTML = '';
+  const entry = document.createElement('div');
+  entry.style.cssText = 'padding:5px 7px;margin-bottom:4px;background:#fff;border:1px solid #e2e8f0;border-radius:5px;line-height:1.5';
+  const ts = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  entry.innerHTML =
+    `<span style="color:#888">${ts}</span> <b style="color:#ef4444">onReachEnd</b><br>` +
+    `start: <b>${data.start}</b> · end: <b>${data.end}</b> · total: <b>${data.total}</b>`;
+  log.insertBefore(entry, log.firstChild);
+}
+
+const items7 = makeBasicItems(100);
+
+const vs7 = new HCGVirtualScroll(items7, {
+  container:          '#list7',
+  itemHeight:         50,
+  bufferSize:         3,
+  reachEndThreshold:  s7Threshold,
+
+  renderItem(item, i) {
+    const [label, cls] = item.badge;
+    return `<div class="hcg-vs-item-basic">
+      <span class="idx">#${i}</span>
+      <span class="name">${item.name}</span>
+      <span class="badge ${cls}">${label}</span>
+    </div>`;
+  },
+
+  onScroll(scrollTop, range) {
+    document.getElementById('s7-scroll').textContent = Math.round(scrollTop);
+    document.getElementById('s7-start').textContent  = range.start;
+    document.getElementById('s7-end').textContent    = range.end;
+  },
+
+  onReachEnd(data) {
+    s7TriggerCount++;
+    document.getElementById('s7-count').textContent = s7TriggerCount;
+    s7LogEvent(data);
+  },
+});
+
+document.getElementById('s7-total').textContent = items7.length;
+const r7 = vs7.getVisibleRange();
+document.getElementById('s7-start').textContent = r7.start;
+document.getElementById('s7-end').textContent   = r7.end;
+
+function s7SetThresh(n) {
+  s7Threshold = n;
+  document.getElementById('s7-thresh').textContent = n;
+  vs7.updateConfig({ reachEndThreshold: n });
+}
+function s7Bottom() { vs7.scrollToBottom(true); }
+function s7Top()    { vs7.scrollToTop(true); }
+function s7Reset() {
+  s7TriggerCount = 0;
+  document.getElementById('s7-count').textContent = 0;
+  vs7.updateData(makeBasicItems(100));
+  document.getElementById('s7-total').textContent = 100;
+  s7ClearLog();
+}
+function s7ClearLog() {
+  const log = document.getElementById('s7-log');
+  log.innerHTML = '<div style="color:#aaa;text-align:center;margin-top:120px">Scroll near the bottom<br>to fire onReachEnd</div>';
+}
+
+// - DEMO 8 - Table -
+const STATUSES = ['Active', 'Inactive', 'Pending'];
+const items8 = Array.from({ length: 100000 }, (_, i) => ({
+  id:     i + 1,
+  name:   `${pick(NAMES)} ${pick(NAMES)}`,
+  email:  `user${i + 1}@example.com`,
+  status: STATUSES[i % 3],
+}));
+
+const vs8 = new HCGVirtualScroll(items8, {
+  container:  '#list8',
+  itemHeight: 44,
+  bufferSize: 4,
+  ariaLabel:  'User table',
+
+  // each row is a mini-table sharing the header's fixed column widths
+  renderItem(item) {
+    const color = item.status === 'Active' ? '#16a34a'
+                : item.status === 'Pending' ? '#b45309' : '#dc2626';
+    return `<table style="width:100%;border-collapse:collapse;table-layout:fixed;">
+      <tbody>
+        <tr style="border-bottom:1px solid #eee;">
+          <td style="width:80px;padding:10px 14px;color:#999">${item.id}</td>
+          <td style="padding:10px 14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${item.name}</td>
+          <td style="padding:10px 14px;color:#555;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${item.email}</td>
+          <td style="width:110px;padding:10px 14px;color:${color};font-weight:600">${item.status}</td>
+        </tr>
+      </tbody>
+    </table>`;
+  },
+
+  onScroll(scrollTop, range) {
+    document.getElementById('s8-scroll').textContent = Math.round(scrollTop);
+    document.getElementById('s8-start').textContent  = range.start;
+    document.getElementById('s8-end').textContent    = range.end;
+    document.getElementById('s8-dom').textContent    = domCount('list8');
+  },
+});
+
+document.getElementById('s8-dom').textContent = domCount('list8');
+const r8 = vs8.getVisibleRange();
+document.getElementById('s8-start').textContent = r8.start;
+document.getElementById('s8-end').textContent   = r8.end;
+
+function s8ScrollTo() {
+  const idx = parseInt(document.getElementById('s8-idx').value, 10);
+  if (!isNaN(idx)) vs8.scrollTo(idx, true);
+}
+function s8Top()    { vs8.scrollToTop(true); }
+function s8Bottom() { vs8.scrollToBottom(true); }
+
+// - DEMO 9 - Live Search -
+const items9 = Array.from({ length: 50000 }, (_, i) => ({
+  id:    i + 1,
+  name:  `${pick(NAMES)} ${pick(NAMES)}`,
+  email: `user${i + 1}@example.com`,
+}));
+
+const vs9 = new HCGVirtualScroll(items9, {
+  container:  '#list9',
+  itemHeight: 50,
+  bufferSize: 4,
+  emptyText:  'No matches found',
+  ariaLabel:  'Search results',
+
+  renderItem(item, i) {
+    return `<div class="hcg-vs-item-basic">
+      <span class="idx">#${item.id}</span>
+      <span class="name">${item.name}</span>
+      <span style="color:#888">${item.email}</span>
+    </div>`;
+  },
+
+  onScroll(scrollTop, range) {
+    document.getElementById('s9-start').textContent = range.start;
+    document.getElementById('s9-end').textContent   = range.end;
+    document.getElementById('s9-dom').textContent   = domCount('list9');
+  },
+});
+
+document.getElementById('s9-dom').textContent = domCount('list9');
+const r9 = vs9.getVisibleRange();
+document.getElementById('s9-start').textContent = r9.start;
+document.getElementById('s9-end').textContent   = r9.end;
+
+function s9Filter(q) {
+  q = q.toLowerCase();
+  // filter a NEW array - never mutate items9
+  const filtered = q
+    ? items9.filter(item =>
+        item.name.toLowerCase().indexOf(q) > -1 ||
+        item.email.toLowerCase().indexOf(q) > -1)
+    : items9;
+  vs9.updateData(filtered);
+  document.getElementById('s9-query').textContent   = q || '(none)';
+  document.getElementById('s9-matches').textContent = filtered.length;
+  document.getElementById('s9-dom').textContent     = domCount('list9');
+}
+
+document.getElementById('s9-input').addEventListener('input', e => s9Filter(e.target.value));
+
+function s9Clear() {
+  document.getElementById('s9-input').value = '';
+  s9Filter('');
+}
+</script>
+</body>
+</html>
