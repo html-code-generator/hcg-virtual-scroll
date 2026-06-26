@@ -1,12 +1,8 @@
-# Dependencies
 node_modules/
-
-# Logs
-*.log
 npm-debug.log*
-
-# Editor / OS
-.vscode/
-.idea/
+package-lock.json
 .DS_Store
 Thumbs.db
+*.tgz
+.idea/
+.vscode/

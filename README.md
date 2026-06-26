@@ -1,5 +1,7 @@
 # hcg-virtual-scroll
 
+<!-- Documentation: https://www.html-code-generator.com/javascript/virtual-scrolling -->
+
 High-performance virtual scrolling for vanilla JavaScript. Only the visible items are in the DOM at any time - no framework required, no dependencies.
 
 - Handles **1 000 000+ items** without UI freeze
@@ -12,7 +14,7 @@ High-performance virtual scrolling for vanilla JavaScript. Only the visible item
 
 **[Live Demo](https://www.html-code-generator.com/demo/javascript/virtual-scrolling.html)** · **[Documentation](https://www.html-code-generator.com/javascript/virtual-scrolling)**
 
-**Version:** 1.0.0 · **License:** MIT · **Author:** [HTML Code Generator](https://www.html-code-generator.com/)
+**Version:** 1.0.2 · **License:** MIT · **Author:** [HTML Code Generator](https://www.html-code-generator.com/)
 
 ---
 
@@ -390,7 +392,7 @@ Your container only needs:
 }
 ```
 
-The library adds the `vs-container` class to your element automatically. You do not need to add it yourself.
+The library adds the `hcg-vs-container` class to your element automatically. You do not need to add it yourself.
 
 ---
 
@@ -1090,6 +1092,8 @@ hcg-virtual-scroll is framework-agnostic. It manages its own DOM inside the cont
 
 ### React
 
+[Try it live on StackBlitz](https://stackblitz.com/edit/hcg-virtual-scroll-react)
+
 ```jsx
 import { useRef, useEffect } from 'react';
 import HCGVirtualScroll from 'hcg-virtual-scroll';
@@ -1121,6 +1125,8 @@ function VirtualList({ data }) {
 
 ### Vue 3
 
+[Try it live on StackBlitz](https://stackblitz.com/edit/hcg-virtual-scroll-vue)
+
 ```vue
 <script setup>
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
@@ -1150,6 +1156,8 @@ onBeforeUnmount(() => vs && vs.destroy());
 ```
 
 ### Svelte
+
+[Try it live on StackBlitz](https://stackblitz.com/edit/hcg-virtual-scroll-svelte)
 
 ```svelte
 <script>
@@ -1246,9 +1254,11 @@ renderItem(item) {
 ```
 hcg-virtual-scroll/
   hcg-virtual-scroll.js    Core library (class-based, no dependencies)
-  hcg-virtual-scroll.css   Required styles + demo styles
+  hcg-virtual-scroll.css   Required styles
   index.html               Live demos (9 examples)
+  website-page.html        Full documentation page
   README.md                This file
+  CHANGELOG.md             Version history
 ```
 
 ---

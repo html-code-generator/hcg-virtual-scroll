@@ -2,8 +2,9 @@
  * hcg-virtual-scroll - vanilla JS virtual scrolling
  * Author: HTML Code Generator
  * https://www.html-code-generator.com/
+ * Documentation: https://www.html-code-generator.com/javascript/virtual-scrolling
  *
- * @version 1.0.0
+ * @version 1.0.2
  * @license MIT
  */
 
@@ -80,8 +81,6 @@ class HCGVirtualScroll {
     // -- DOM ------------------------------------------------------------------
 
     this._container = container;
-    this._phantom   = null;
-    this._content   = null;
 
     if (options.containerHeight) {
       const h = parseFloat(options.containerHeight);
@@ -331,9 +330,15 @@ class HCGVirtualScroll {
   _renderLoading() {
     this._phantom.style.height    = '0px';
     this._content.style.transform = 'translateY(0px)';
-    this._content.innerHTML       = this._loadingHTML
-      ? this._loadingHTML
-      : `<div class="hcg-vs-loading">${this._loadingText}</div>`;
+    if (this._loadingHTML) {
+      this._content.innerHTML = this._loadingHTML;
+    } else {
+      const el = document.createElement('div');
+      el.className = 'hcg-vs-loading';
+      el.textContent = this._loadingText;
+      this._content.innerHTML = '';
+      this._content.appendChild(el);
+    }
   }
 
   // Render empty state inside content
@@ -343,7 +348,11 @@ class HCGVirtualScroll {
     if (this._emptyHTML) {
       this._content.innerHTML = this._emptyHTML;
     } else if (this._emptyText) {
-      this._content.innerHTML = `<div class="hcg-vs-empty">${this._emptyText}</div>`;
+      const el = document.createElement('div');
+      el.className = 'hcg-vs-empty';
+      el.textContent = this._emptyText;
+      this._content.innerHTML = '';
+      this._content.appendChild(el);
     } else {
       this._content.innerHTML = '';
     }
@@ -593,20 +602,18 @@ class HCGVirtualScroll {
   }
 
   clear() {
-    this._loading                 = false;  // always exit loading state on clear
-    this._items                   = [];
-    this._positions               = [];
-    this._rawTotal                = 0;
-    this._reachedEnd              = false;
-    this._reachedStart            = false;
-    this._prevScrollTop           = 0;
-    this._scrollSpeed             = 0;
-    this._lastStart               = -1;
-    this._lastEnd                 = -1;
-    this._phantom.style.height    = '0px';
-    this._content.style.transform = 'translateY(0px)';
-    this._container.scrollTop     = 0;
-    this._renderEmpty();
+    this._loading        = false;
+    this._items          = [];
+    this._positions      = [];
+    this._rawTotal        = 0;
+    this._reachedEnd      = false;
+    this._reachedStart    = false;
+    this._prevScrollTop   = 0;
+    this._scrollSpeed     = 0;
+    this._lastStart       = -1;
+    this._lastEnd         = -1;
+    this._container.scrollTop = 0;
+    this._render();
   }
 
   getScrollPosition() {
