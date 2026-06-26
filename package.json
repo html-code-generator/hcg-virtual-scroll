@@ -1,6 +1,6 @@
 {
   "name": "hcg-virtual-scroll",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "High-performance vanilla JavaScript virtual scrolling library. Render 1,000,000+ list rows with only visible items in the DOM. Zero dependencies.",
   "main": "hcg-virtual-scroll.js",
   "style": "hcg-virtual-scroll.css",

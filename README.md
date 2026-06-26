@@ -14,7 +14,7 @@ High-performance virtual scrolling for vanilla JavaScript. Only the visible item
 
 **[Live Demo](https://www.html-code-generator.com/demo/javascript/virtual-scrolling)** · **[Documentation](https://www.html-code-generator.com/javascript/virtual-scrolling)**
 
-**Version:** 1.0.3 · **License:** MIT · **Author:** [HTML Code Generator](https://www.html-code-generator.com/)
+**Version:** 1.0.4 · **License:** MIT · **Author:** [HTML Code Generator](https://www.html-code-generator.com/)
 
 ---
 
