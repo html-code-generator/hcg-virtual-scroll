@@ -12,9 +12,9 @@ High-performance virtual scrolling for vanilla JavaScript. Only the visible item
 - ResizeObserver, adaptive overscan, ARIA support
 - Works with React, Vue, Svelte, or no framework at all
 
-**[Live Demo](https://www.html-code-generator.com/demo/javascript/virtual-scrolling.html)** · **[Documentation](https://www.html-code-generator.com/javascript/virtual-scrolling)**
+**[Live Demo](https://www.html-code-generator.com/demo/javascript/virtual-scrolling)** · **[Documentation](https://www.html-code-generator.com/javascript/virtual-scrolling)**
 
-**Version:** 1.0.2 · **License:** MIT · **Author:** [HTML Code Generator](https://www.html-code-generator.com/)
+**Version:** 1.0.3 · **License:** MIT · **Author:** [HTML Code Generator](https://www.html-code-generator.com/)
 
 ---
 
