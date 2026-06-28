@@ -4,7 +4,7 @@
  * https://www.html-code-generator.com/
  * Documentation: https://www.html-code-generator.com/javascript/virtual-scrolling
  *
- * @version 1.0.4
+ * @version 1.0.5
  * @license MIT
  */
 
