@@ -20,12 +20,7 @@ class HCGVirtualScroll {
     if (!options.container)  throw new Error('HCGVirtualScroll: "container" option is required.');
     if (!options.renderItem) throw new Error('HCGVirtualScroll: "renderItem" option is required.');
 
-    // Resolve container element
-    const container = typeof options.container === 'string'
-      ? (document.querySelector(options.container) ||
-         document.getElementById(options.container.replace(/^#/, '')))
-      : options.container;
-
+    const container = HCGVirtualScroll._resolveEl(options.container);
     if (!container) throw new Error('HCGVirtualScroll: container element not found.');
 
     // -- Config ---------------------------------------------------------------
@@ -68,14 +63,16 @@ class HCGVirtualScroll {
     this._lastStart      = -1;
     this._lastEnd        = -1;
     this._rafId          = null;
+    this._scrollDecayId  = null;
     this._reachedEnd     = false;
     this._reachedStart   = false;
     this._prevScrollTop  = 0;
     this._scrollSpeed    = 0;
     this._resizeObserver = null;
+    this._resizeRaf      = null;
     this._loading        = false;
     this._destroyed      = false;
-    this._forceFresh     = false;  // force fresh render on next recycle (after data change)
+    this._forceFresh     = false;
     this._warnedDuplicateKey = false;
 
     // -- DOM ------------------------------------------------------------------
@@ -101,22 +98,29 @@ class HCGVirtualScroll {
     container.appendChild(this._phantom);
     container.appendChild(this._content);
 
-    // Bind scroll handler once so the same reference can be removed in destroy()
     this._boundHandleScroll = this._handleScroll.bind(this);
     container.addEventListener('scroll', this._boundHandleScroll, { passive: true });
 
-    // ResizeObserver
     if (typeof ResizeObserver !== 'undefined') {
       this._resizeObserver = new ResizeObserver(() => {
-        if (this._onResize) this._onResize({ width: this._container.clientWidth, height: this._container.clientHeight });
-        this._lastStart = -1;
-        this._lastEnd   = -1;
-        this._render();
+        if (this._resizeRaf) cancelAnimationFrame(this._resizeRaf);
+        this._resizeRaf = requestAnimationFrame(() => {
+          this._resizeRaf = null;
+          this._scrollSpeed = 0;
+          if (this._onResize) {
+            this._onResize({
+              width:  this._container.clientWidth,
+              height: this._container.clientHeight
+            });
+          }
+          this._lastStart = -1;
+          this._lastEnd   = -1;
+          this._render();
+        });
       });
       this._resizeObserver.observe(container);
     }
 
-    // Initial render
     this._buildPositions();
     if (this._reverse && this._items.length > 0) {
       container.scrollTop = Math.max(0, this._phantom.offsetHeight - container.clientHeight);
@@ -128,15 +132,21 @@ class HCGVirtualScroll {
   // Private helpers
   // ---------------------------------------------------------------------------
 
-  // Normalize input to a real array. null / undefined become []. A non-array value
-  // (object, string, number) is rejected with a warning so the list does not fail
-  // silently when, for example, an API returns {} instead of [].
   static _toArray(data, where) {
     if (data == null) return [];
     if (Array.isArray(data)) return data;
     console.warn('HCGVirtualScroll: ' + (where || 'data') +
       ' must be an array, received ' + (typeof data) + '. Using an empty list instead.');
     return [];
+  }
+
+  static _resolveEl(target) {
+    if (!target) return null;
+    if (typeof target === 'string') {
+      return document.querySelector(target) ||
+        document.getElementById(target.replace(/^#/, ''));
+    }
+    return target;
   }
 
   _isFixed() {
@@ -150,7 +160,6 @@ class HCGVirtualScroll {
       let top = 0;
       this._positions = new Array(this._items.length);
       for (let i = 0; i < this._items.length; i++) {
-        // guard against 0, negative, NaN - fall back to the estimated height
         let h = this._itemHeight(this._items[i], i);
         if (!(h > 0)) h = this._estimatedItemHeight;
         this._positions[i] = { top, height: h };
@@ -168,7 +177,6 @@ class HCGVirtualScroll {
       const prev = this._positions[startIdx - 1];
       let top    = prev ? prev.top + prev.height : 0;
       for (let i = 0; i < newItems.length; i++) {
-        // guard against 0, negative, NaN - fall back to the estimated height
         let h = this._itemHeight(newItems[i], startIdx + i);
         if (!(h > 0)) h = this._estimatedItemHeight;
         this._positions[startIdx + i] = { top, height: h };
@@ -179,9 +187,6 @@ class HCGVirtualScroll {
     this._phantom.style.height = Math.min(this._rawTotal, this._maxHeight) + 'px';
   }
 
-  // Compression ratio: maps the scrollable range (rawTotal - viewH) onto (maxHeight - viewH).
-  // Using scrollable ranges - not total heights - ensures the last items are always reachable.
-  // Returns 1 when no compression is needed.
   _scale() {
     if (this._rawTotal <= this._maxHeight) return 1;
     const viewH = this._container.clientHeight;
@@ -189,7 +194,6 @@ class HCGVirtualScroll {
     return den > 0 ? (this._rawTotal - viewH) / den : this._rawTotal / this._maxHeight;
   }
 
-  // Convert an item's unscaled top position to the scrollTop that shows it at the viewport top.
   _indexToScrollTop(index) {
     const raw   = this._isFixed() ? index * this._itemHeight : this._positions[index].top;
     const scale = this._scale();
@@ -215,7 +219,6 @@ class HCGVirtualScroll {
     const buf    = this._effectiveBuffer();
     const scale  = this._scale();
     const adj    = scrollTop * scale;
-    // Items are rendered at natural heights, so the viewport covers viewH * scale unscaled pixels.
     const bottom = adj + viewH * scale;
 
     let start, end;
@@ -235,8 +238,6 @@ class HCGVirtualScroll {
       while (end < count - 1 && this._positions[end + 1].top < bottom) { end++; }
     }
 
-    // rawStart / rawEnd  = strict viewport indices (used by reach callbacks)
-    // start / end        = buffered/overscanned indices (used for rendering)
     return {
       rawStart: Math.max(0, start),
       rawEnd:   Math.min(count - 1, end),
@@ -247,16 +248,20 @@ class HCGVirtualScroll {
 
   _createItemElement(item, index) {
     const result = this._renderItem(item, index);
-    let el;
+    let inner;
     if (result instanceof Element) {
-      el = result;
+      inner = result;
     } else {
-      const wrapper     = document.createElement('div');
-      wrapper.innerHTML = result;
-      el = wrapper.firstElementChild || wrapper;
+      const tmp         = document.createElement('div');
+      tmp.innerHTML     = result;
+      inner = tmp.firstElementChild || tmp;
     }
+
+    const el = document.createElement('div');
+    el.className = 'hcg-vs-item';
     el.setAttribute('role', 'listitem');
     if (this._keyField != null) el.dataset.vsKey = String(item[this._keyField]);
+    el.appendChild(inner);
     return el;
   }
 
@@ -275,9 +280,6 @@ class HCGVirtualScroll {
     const pool     = new Map();
     const children = this._content.children;
 
-    // When data changed (updateData / updateConfig / refresh), skip the pool so every
-    // visible row is re-rendered with fresh content. During plain scrolling the pool is
-    // used so DOM nodes - and their focus / checkbox / input state - are preserved.
     if (!this._forceFresh) {
       for (let i = 0; i < children.length; i++) {
         const child = children[i];
@@ -285,13 +287,12 @@ class HCGVirtualScroll {
       }
     }
 
-    const seen = new Set();  // duplicate-key detection for the rendered range
+    const seen = new Set();
     const frag = document.createDocumentFragment();
     for (let i = range.start; i <= range.end; i++) {
       const h      = this._getItemHeight(i);
       const rawKey = this._items[i][this._keyField];
 
-      // missing or null key - fall back to fresh render for this item
       if (rawKey == null) {
         const el        = this._createItemElement(this._items[i], i);
         el.style.height = h + 'px';
@@ -301,7 +302,6 @@ class HCGVirtualScroll {
 
       const key = String(rawKey);
 
-      // warn once if duplicate keys are found - recycling needs unique keys
       if (seen.has(key) && !this._warnedDuplicateKey) {
         this._warnedDuplicateKey = true;
         console.warn('HCGVirtualScroll: duplicate keyField value "' + key +
@@ -323,10 +323,9 @@ class HCGVirtualScroll {
 
     this._content.innerHTML = '';
     this._content.appendChild(frag);
-    this._forceFresh = false;  // reset after each render
+    this._forceFresh = false;
   }
 
-  // Render loading state inside content
   _renderLoading() {
     this._phantom.style.height    = '0px';
     this._content.style.transform = 'translateY(0px)';
@@ -341,7 +340,6 @@ class HCGVirtualScroll {
     }
   }
 
-  // Render empty state inside content
   _renderEmpty() {
     this._phantom.style.height    = '0px';
     this._content.style.transform = 'translateY(0px)';
@@ -359,7 +357,6 @@ class HCGVirtualScroll {
   }
 
   _render() {
-    // Loading state takes priority - pause all rendering
     if (this._loading) return;
 
     const scrollTop = this._container.scrollTop;
@@ -367,10 +364,6 @@ class HCGVirtualScroll {
 
     if (this._onScroll) this._onScroll(scrollTop, { start: range.start, end: range.end });
 
-    // Reach-end / reach-start callbacks
-    // Threshold is checked against the strict viewport range (rawStart / rawEnd),
-    // not the buffered range, so triggers fire when the real viewport edge nears
-    // the list boundary - not earlier because of overscan.
     if (this._items.length > 0) {
       if (this._onReachEnd) {
         if (range.rawEnd >= this._items.length - 1 - this._reachEndThreshold) {
@@ -394,21 +387,12 @@ class HCGVirtualScroll {
       }
     }
 
-    // Transform updated BEFORE early-return check (Bug #1 fix):
-    // In compressed scroll mode scrollTop can change while start/end stay the same,
-    // so translateY must always be recalculated even when the rendered range is unchanged.
     if (this._items.length > 0 && range.end >= 0) {
       const scale        = this._scale();
       const adj          = scrollTop * scale;
       const firstItemTop = this._isFixed()
         ? range.start * this._itemHeight
         : this._positions[range.start].top;
-      // Continuous translation: keeps rendered items pinned to the exact scroll position
-      // so there is no visual jump when items enter or leave the DOM at the buffer boundary.
-      // translateY = scrollTop - (adj - firstItemTop)
-      //   adj           = scrollTop in unscaled item-space
-      //   firstItemTop  = unscaled top of first rendered item
-      //   the difference is how far into the first rendered item the viewport has scrolled
       this._content.style.transform = `translateY(${scrollTop - (adj - firstItemTop)}px)`;
     }
 
@@ -417,7 +401,6 @@ class HCGVirtualScroll {
     this._lastStart = range.start;
     this._lastEnd   = range.end;
 
-    // Empty state
     if (this._items.length === 0) {
       this._renderEmpty();
       if (this._onVisibleChange) this._onVisibleChange({ start: 0, end: -1 });
@@ -443,6 +426,15 @@ class HCGVirtualScroll {
       this._render();
       this._rafId = null;
     });
+    // Shrink adaptive overscan after scrolling stops so rows stay in view.
+    if (this._scrollDecayId) clearTimeout(this._scrollDecayId);
+    this._scrollDecayId = setTimeout(() => {
+      this._scrollSpeed = 0;
+      this._lastStart   = -1;
+      this._lastEnd     = -1;
+      this._render();
+      this._scrollDecayId = null;
+    }, 120);
   }
 
   // ---------------------------------------------------------------------------
@@ -529,7 +521,6 @@ class HCGVirtualScroll {
       addedHeight = 0;
       for (let i = 0; i < newItems.length; i++) addedHeight += this._positions[i].height;
     }
-    // Add the prepended height in unscaled space, then re-scale to the new total.
     this._container.scrollTop = (savedAdj + addedHeight) / this._scale();
     this._render();
   }
@@ -636,6 +627,8 @@ class HCGVirtualScroll {
     if (this._destroyed) return;
     this._destroyed = true;
     if (this._rafId) cancelAnimationFrame(this._rafId);
+    if (this._resizeRaf) cancelAnimationFrame(this._resizeRaf);
+    if (this._scrollDecayId) clearTimeout(this._scrollDecayId);
     if (this._resizeObserver) this._resizeObserver.disconnect();
     this._container.removeEventListener('scroll', this._boundHandleScroll);
     this._container.classList.remove('hcg-vs-container');
@@ -649,8 +642,5 @@ class HCGVirtualScroll {
 // Export
 // ---------------------------------------------------------------------------
 
-// Browser global
 if (typeof window !== 'undefined') window.HCGVirtualScroll = HCGVirtualScroll;
-
-// CommonJS / Node.js
 if (typeof module !== 'undefined' && module.exports) module.exports = HCGVirtualScroll;

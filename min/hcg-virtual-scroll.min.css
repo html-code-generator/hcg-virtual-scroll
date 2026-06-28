@@ -2,4 +2,4 @@
  * hcg-virtual-scroll - styles
  * Author: HTML Code Generator
  * https://www.html-code-generator.com/
- */.hcg-vs-container{position:relative;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}.hcg-vs-phantom{position:absolute;top:0;left:0;width:1px;pointer-events:none;visibility:hidden}.hcg-vs-content{position:absolute;top:0;left:0;width:100%}.hcg-vs-empty,.hcg-vs-loading{display:flex;align-items:center;justify-content:center;margin-top:100px}
+ */.hcg-vs-container{border:solid 1px #aaa;position:relative;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}.hcg-vs-phantom{position:absolute;top:0;left:0;width:1px;pointer-events:none;visibility:hidden}.hcg-vs-content{position:absolute;top:0;left:0;width:100%}.hcg-vs-item{width:100%;box-sizing:border-box;overflow:hidden}.hcg-vs-item>*{width:100%;height:100%;box-sizing:border-box}.hcg-vs-item>table{border-collapse:collapse;table-layout:fixed}.hcg-vs-empty,.hcg-vs-loading{display:flex;align-items:center;justify-content:center;margin-top:100px}

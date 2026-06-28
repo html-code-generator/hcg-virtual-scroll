@@ -187,6 +187,23 @@
       overflow-x: auto;
     }
 
+    .demo-code-label {
+      margin: 0;
+      padding: 8px 14px 4px;
+      font-size: .68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: #6b7280;
+    }
+
+    .demo-code-label + .demo-code-label,
+    .demo-code pre + .demo-code-label {
+      border-top: 1px solid #e5e7eb;
+      margin-top: 4px;
+      padding-top: 12px;
+    }
+
     .demo-code code {
       display: block;
       font-family: "Fira Code", "Cascadia Code", ui-monospace, monospace;
@@ -283,6 +300,57 @@
       display: flex; align-items: center; justify-content: center; height: 100%;
       color: #bbb; font-size: 0.9rem; pointer-events: none;
     }
+
+    /* -- Virtual table demo (section 8) -- */
+    .vs-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+    }
+
+    .vs-table-inner {
+      min-width: 520px;
+    }
+
+    #s8-header {
+      width: 100%;
+      box-sizing: border-box;
+      background: #f9fafb;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    #s8-header table,
+    #list8 .hcg-vs-item > table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      box-sizing: border-box;
+    }
+
+    #list8 {
+      box-sizing: border-box;
+    }
+
+    #s8-header th,
+    #list8 .hcg-vs-item td {
+      padding: 10px 14px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      border-bottom: none;
+    }
+
+    #s8-header th.col-id,
+    #list8 .hcg-vs-item td.col-id     { width: 80px; }
+    #list8 .hcg-vs-item td.col-id     { color: #999; }
+    #s8-header th.col-status,
+    #list8 .hcg-vs-item td.col-status { width: 110px; }
+    #list8 .hcg-vs-item td.col-status { font-weight: 600; }
+
+    @media (max-width: 600px) {
+      .vs-table-inner { min-width: 480px; }
+    }
   </style>
   <script type="application/ld+json">
   {
@@ -337,6 +405,13 @@
   </div>
   <details class="demo-code">
     <summary>View usage code</summary>
+    <p class="demo-code-label">HTML</p>
+    <pre><code>&lt;link rel="stylesheet" href="hcg-virtual-scroll.css"&gt;
+
+&lt;div id="list1" style="height:360px;overflow-y:auto"&gt;&lt;/div&gt;
+
+&lt;script src="hcg-virtual-scroll.js"&gt;&lt;/script&gt;</code></pre>
+    <p class="demo-code-label">JavaScript</p>
     <pre><code>const vs = new HCGVirtualScroll(data, {
   container:        '#list1',
   itemHeight:       50,
@@ -384,6 +459,13 @@
   </div>
   <details class="demo-code">
     <summary>View usage code</summary>
+    <p class="demo-code-label">HTML</p>
+    <pre><code>&lt;link rel="stylesheet" href="hcg-virtual-scroll.css"&gt;
+
+&lt;div id="list2" style="height:360px;overflow-y:auto"&gt;&lt;/div&gt;
+
+&lt;script src="hcg-virtual-scroll.js"&gt;&lt;/script&gt;</code></pre>
+    <p class="demo-code-label">JavaScript</p>
     <pre><code>const data = items.map(item => ({
   ...item,
   height: item.body.length &gt; 80 ? 96 : 44,
@@ -432,6 +514,13 @@ const vs = new HCGVirtualScroll(data, {
   </div>
   <details class="demo-code">
     <summary>View usage code</summary>
+    <p class="demo-code-label">HTML</p>
+    <pre><code>&lt;link rel="stylesheet" href="hcg-virtual-scroll.css"&gt;
+
+&lt;div id="list3" style="height:360px;overflow-y:auto"&gt;&lt;/div&gt;
+
+&lt;script src="hcg-virtual-scroll.js"&gt;&lt;/script&gt;</code></pre>
+    <p class="demo-code-label">JavaScript</p>
     <pre><code>const vs = new HCGVirtualScroll(data, {
   container:  '#list3',
   itemHeight: 72,
@@ -480,6 +569,13 @@ document.getElementById('list3').addEventListener('change', function (e) {
   </div>
   <details class="demo-code">
     <summary>View usage code</summary>
+    <p class="demo-code-label">HTML</p>
+    <pre><code>&lt;link rel="stylesheet" href="hcg-virtual-scroll.css"&gt;
+
+&lt;div id="list4" style="height:360px;overflow-y:auto"&gt;&lt;/div&gt;
+
+&lt;script src="hcg-virtual-scroll.js"&gt;&lt;/script&gt;</code></pre>
+    <p class="demo-code-label">JavaScript</p>
     <pre><code>vs.updateConfig({ itemHeight: 36 });
 vs.updateConfig({ renderItem: renderCompact });
 vs.updateConfig({ bufferSize: 8, adaptiveOverscan: false });</code></pre>
@@ -512,6 +608,13 @@ vs.updateConfig({ bufferSize: 8, adaptiveOverscan: false });</code></pre>
   </div>
   <details class="demo-code">
     <summary>View usage code</summary>
+    <p class="demo-code-label">HTML</p>
+    <pre><code>&lt;link rel="stylesheet" href="hcg-virtual-scroll.css"&gt;
+
+&lt;div id="list5" style="height:360px;overflow-y:auto"&gt;&lt;/div&gt;
+
+&lt;script src="hcg-virtual-scroll.js"&gt;&lt;/script&gt;</code></pre>
+    <p class="demo-code-label">JavaScript</p>
     <pre><code>const vs = new HCGVirtualScroll(initialData, {
   container:         '#list5',
   itemHeight:        56,
@@ -551,6 +654,14 @@ vs.updateConfig({ bufferSize: 8, adaptiveOverscan: false });</code></pre>
   </div>
   <details class="demo-code">
     <summary>View usage code</summary>
+    <p class="demo-code-label">HTML</p>
+    <pre><code>&lt;link rel="stylesheet" href="hcg-virtual-scroll.css"&gt;
+
+&lt;input type="text" id="chat-input" placeholder="Type a message…"&gt;
+&lt;div id="list6" style="height:360px;overflow-y:auto"&gt;&lt;/div&gt;
+
+&lt;script src="hcg-virtual-scroll.js"&gt;&lt;/script&gt;</code></pre>
+    <p class="demo-code-label">JavaScript</p>
     <pre><code>const vs = new HCGVirtualScroll(messages, {
   container:           '#list6',
   itemHeight:          msg => msg.height,
@@ -607,6 +718,13 @@ vs.append([{ id: Date.now(), author: 'me', text: 'Hello!', height: 54 }]);</code
   </div>
   <details class="demo-code">
     <summary>View usage code</summary>
+    <p class="demo-code-label">HTML</p>
+    <pre><code>&lt;link rel="stylesheet" href="hcg-virtual-scroll.css"&gt;
+
+&lt;div id="list7" style="height:360px;overflow-y:auto"&gt;&lt;/div&gt;
+
+&lt;script src="hcg-virtual-scroll.js"&gt;&lt;/script&gt;</code></pre>
+    <p class="demo-code-label">JavaScript</p>
     <pre><code>const vs = new HCGVirtualScroll(data, {
   container:         '#list7',
   itemHeight:        50,
@@ -642,35 +760,72 @@ vs.updateConfig({ reachEndThreshold: 15 });</code></pre>
       <button class="demo-btn" type="button" onclick="s8Top()">scrollToTop()</button>
       <button class="demo-btn" type="button" onclick="s8Bottom()">scrollToBottom()</button>
     </div>
-    <div id="s8-header">
-      <table style="width:100%;border-collapse:collapse;table-layout:fixed;">
-        <thead style="background:#f9fafb;">
-          <tr>
-            <th style="width:80px;padding:10px 14px;text-align:left;border-bottom:2px solid #e5e7eb">ID</th>
-            <th style="padding:10px 14px;text-align:left;border-bottom:2px solid #e5e7eb">Name</th>
-            <th style="padding:10px 14px;text-align:left;border-bottom:2px solid #e5e7eb">Email</th>
-            <th style="width:110px;padding:10px 14px;text-align:left;border-bottom:2px solid #e5e7eb">Status</th>
-          </tr>
-        </thead>
-      </table>
+    <div class="vs-table-wrap">
+      <div class="vs-table-inner">
+        <div id="s8-header">
+          <table>
+            <thead>
+              <tr>
+                <th class="col-id" style="padding:10px 14px;text-align:left">ID</th>
+                <th style="padding:10px 14px;text-align:left">Name</th>
+                <th style="padding:10px 14px;text-align:left">Email</th>
+                <th class="col-status" style="padding:10px 14px;text-align:left">Status</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div id="list8" class="scroll-list" style="border:none;border-radius:0;"></div>
+      </div>
     </div>
-    <div id="list8" class="scroll-list"></div>
   </div>
   <details class="demo-code">
     <summary>View usage code</summary>
+    <p class="demo-code-label">HTML</p>
+    <pre><code>&lt;link rel="stylesheet" href="hcg-virtual-scroll.css"&gt;
+
+&lt;div class="vs-table-wrap"&gt;
+  &lt;div class="vs-table-inner"&gt;
+    &lt;div id="s8-header"&gt;
+      &lt;table&gt;
+        &lt;thead&gt;
+          &lt;tr&gt;
+            &lt;th class="col-id"&gt;ID&lt;/th&gt;
+            &lt;th&gt;Name&lt;/th&gt;
+            &lt;th&gt;Email&lt;/th&gt;
+            &lt;th class="col-status"&gt;Status&lt;/th&gt;
+          &lt;/tr&gt;
+        &lt;/thead&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+    &lt;div id="list8" style="height:360px;overflow-y:auto"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;script src="hcg-virtual-scroll.js"&gt;&lt;/script&gt;</code></pre>
+    <p class="demo-code-label">JavaScript</p>
     <pre><code>const vs = new HCGVirtualScroll(rows, {
   container:  '#list8',
   itemHeight: 44,
+  keyField:   'id',
 
   renderItem(item) {
-    return `&lt;table style="width:100%;table-layout:fixed;"&gt;&lt;tbody&gt;&lt;tr&gt;
-      &lt;td style="width:80px"&gt;${item.id}&lt;/td&gt;
+    return `&lt;table&gt;&lt;tr&gt;
+      &lt;td class="col-id"&gt;${item.id}&lt;/td&gt;
       &lt;td&gt;${item.name}&lt;/td&gt;
       &lt;td&gt;${item.email}&lt;/td&gt;
-      &lt;td style="width:110px"&gt;${item.status}&lt;/td&gt;
-    &lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;`;
+      &lt;td class="col-status"&gt;${item.status}&lt;/td&gt;
+    &lt;/tr&gt;&lt;/table&gt;`;
   },
-});</code></pre>
+
+  onResize() { syncHeader(); },
+});
+
+function syncHeader() {
+  const list = document.getElementById('list8');
+  const header = document.getElementById('s8-header');
+  header.style.paddingRight = (list.offsetWidth - list.clientWidth) + 'px';
+}
+syncHeader();</code></pre>
   </details>
 </section>
 
@@ -697,6 +852,14 @@ vs.updateConfig({ reachEndThreshold: 15 });</code></pre>
   </div>
   <details class="demo-code">
     <summary>View usage code</summary>
+    <p class="demo-code-label">HTML</p>
+    <pre><code>&lt;link rel="stylesheet" href="hcg-virtual-scroll.css"&gt;
+
+&lt;input type="text" id="search-input" placeholder="Search by name or email…"&gt;
+&lt;div id="list9" style="height:360px;overflow-y:auto"&gt;&lt;/div&gt;
+
+&lt;script src="hcg-virtual-scroll.js"&gt;&lt;/script&gt;</code></pre>
+    <p class="demo-code-label">JavaScript</p>
     <pre><code>searchInput.addEventListener('input', function (e) {
   const q = e.target.value.toLowerCase();
   const filtered = allItems.filter(item =>
@@ -1225,22 +1388,18 @@ const vs8 = new HCGVirtualScroll(items8, {
   container:  '#list8',
   itemHeight: 44,
   bufferSize: 4,
+  keyField:   'id',
   ariaLabel:  'User table',
 
-  // each row is a mini-table sharing the header's fixed column widths
   renderItem(item) {
     const color = item.status === 'Active' ? '#16a34a'
                 : item.status === 'Pending' ? '#b45309' : '#dc2626';
-    return `<table style="width:100%;border-collapse:collapse;table-layout:fixed;">
-      <tbody>
-        <tr style="border-bottom:1px solid #eee;">
-          <td style="width:80px;padding:10px 14px;color:#999">${item.id}</td>
-          <td style="padding:10px 14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${item.name}</td>
-          <td style="padding:10px 14px;color:#555;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${item.email}</td>
-          <td style="width:110px;padding:10px 14px;color:${color};font-weight:600">${item.status}</td>
-        </tr>
-      </tbody>
-    </table>`;
+    return `<table><tr>
+      <td class="col-id">${item.id}</td>
+      <td>${item.name}</td>
+      <td>${item.email}</td>
+      <td class="col-status" style="color:${color}">${item.status}</td>
+    </tr></table>`;
   },
 
   onScroll(scrollTop, range) {
@@ -1251,19 +1410,24 @@ const vs8 = new HCGVirtualScroll(items8, {
   },
 
   // keep the header aligned with the rows when the container resizes
-  onResize() { s8SyncHeader(); },
+  onResize() { s8ScheduleHeaderSync(); },
 });
 
-// Pad the header by the scrollbar width so its columns line up with the rows,
-// which sit inside the scrollable area (narrower by the scrollbar).
+// Pad the header by the scrollbar width so columns line up with the rows.
+// Background lives on #s8-header (not thead) so the padded area stays filled.
 function s8SyncHeader() {
-  const list = document.getElementById('list8');
+  const list   = document.getElementById('list8');
   const header = document.getElementById('s8-header');
   if (!list || !header) return;
-  const scrollbar = list.offsetWidth - list.clientWidth;   // 0 on overlay-scrollbar systems
+  const scrollbar = list.offsetWidth - list.clientWidth;
+  header.style.width = '';
   header.style.paddingRight = scrollbar + 'px';
 }
+function s8ScheduleHeaderSync() {
+  requestAnimationFrame(s8SyncHeader);
+}
 s8SyncHeader();
+window.addEventListener('resize', s8ScheduleHeaderSync, { passive: true });
 
 document.getElementById('s8-dom').textContent = domCount('list8');
 const r8 = vs8.getVisibleRange();

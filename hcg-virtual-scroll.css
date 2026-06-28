@@ -6,6 +6,7 @@
 
 /* -- Container - the scroll element the library mounts on -- */
 .hcg-vs-container {
+  border: solid 1px #aaa;
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
@@ -28,6 +29,25 @@
   top: 0;
   left: 0;
   width: 100%;
+}
+
+/* Row wrapper - one per rendered item; keeps tables and custom markup at itemHeight */
+.hcg-vs-item {
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Inner row content fills the wrapper height set by itemHeight */
+.hcg-vs-item > * {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.hcg-vs-item > table {
+  border-collapse: collapse;
+  table-layout: fixed;
 }
 
 /* Empty-data and loading state - centered message inside the container */

@@ -12,9 +12,9 @@ High-performance virtual scrolling for vanilla JavaScript. Only the visible item
 - ResizeObserver, adaptive overscan, ARIA support
 - Works with React, Vue, Svelte, or no framework at all
 
-**[Live Demo](https://www.html-code-generator.com/demo/javascript/virtual-scrolling)** · **[Documentation](https://www.html-code-generator.com/javascript/virtual-scrolling)**
+**[Live Demo](https://www.html-code-generator.com/demo/javascript/virtual-scrolling.html)** · **[Documentation](https://www.html-code-generator.com/javascript/virtual-scrolling)**
 
-**Version:** 1.0.4 · **License:** MIT · **Author:** [HTML Code Generator](https://www.html-code-generator.com/)
+**Version:** 1.0.2 · **License:** MIT · **Author:** [HTML Code Generator](https://www.html-code-generator.com/)
 
 ---
 
@@ -39,19 +39,18 @@ The same scroll with a live counter - the rendered element count stays around 10
 5. [Callbacks](#callbacks)
 6. [Public Methods](#public-methods)
 7. [Usage - DIV List](#usage---div-list)
-8. [Usage - UL List](#usage---ul-list)
-9. [Usage - OL List](#usage---ol-list)
-10. [Usage - TABLE](#usage---table)
-11. [Dynamic Item Heights](#dynamic-item-heights)
-12. [DOM Recycling with keyField](#dom-recycling-with-keyfield)
-13. [Infinite Scroll](#infinite-scroll)
-14. [Chat / Reverse Mode](#chat--reverse-mode)
-15. [Empty State](#empty-state)
-16. [Loading State](#loading-state)
-17. [Live Config Hot-Swap](#live-config-hot-swap)
-18. [Multiple Instances](#multiple-instances)
-19. [Using with React, Vue & Svelte](#using-with-react-vue--svelte)
-20. [Security Note](#security-note)
+8. [Usage - UL / OL List](#usage---ul-list)
+9. [Usage - TABLE](#usage---table)
+10. [Dynamic Item Heights](#dynamic-item-heights)
+11. [DOM Recycling with keyField](#dom-recycling-with-keyfield)
+12. [Infinite Scroll](#infinite-scroll)
+13. [Chat / Reverse Mode](#chat--reverse-mode)
+14. [Empty State](#empty-state)
+15. [Loading State](#loading-state)
+16. [Live Config Hot-Swap](#live-config-hot-swap)
+17. [Multiple Instances](#multiple-instances)
+18. [Using with React, Vue & Svelte](#using-with-react-vue--svelte)
+19. [Security Note](#security-note)
 
 ---
 
@@ -147,63 +146,25 @@ const vs = new HCGVirtualScroll(prices, {
 
 ### Load data from an API
 
-Fetch your data first, then create the instance - or create an empty instance and call `updateData()` when the data arrives.
-
-**Fetch then create:**
+Create an empty list, call `showLoading()` while fetching, then `updateData()` and `hideLoading()` when the response arrives:
 
 ```js
-fetch('https://api.example.com/users')
-  .then(res => res.json())
-  .then(users => {
-    const vs = new HCGVirtualScroll(users, {
-      container:  '#userList',
-      itemHeight: 56,
-      renderItem(item) {
-        return `<div class="row">${item.name} - ${item.email}</div>`;
-      },
-    });
-  });
-```
-
-**Create empty, update when ready:**
-
-```js
-// Create with empty array - shows nothing until data arrives
 const vs = new HCGVirtualScroll([], {
-  container:  '#userList',
-  itemHeight: 56,
-  renderItem(item) {
-    return `<div class="row">${item.name} - ${item.email}</div>`;
-  },
+  container:   '#fetch-data',
+  itemHeight:  56,
+  loadingText: 'Fetching data...',
+  emptyText:   'No results found',
+  renderItem:  item => `<div class="row">${item.title}</div>`,
 });
 
-// Later - replace data when fetch completes
-fetch('https://api.example.com/users')
+vs.showLoading();
+
+fetch('https://jsonplaceholder.typicode.com/posts')
   .then(res => res.json())
-  .then(users => vs.updateData(users));
-```
-
-**With async / await:**
-
-```js
-async function loadList() {
-  const res   = await fetch('https://api.example.com/products');
-  const items = await res.json();
-
-  const vs = new HCGVirtualScroll(items, {
-    container:  '#productList',
-    itemHeight: 72,
-    renderItem(item) {
-      return `<div class="row">
-        <img src="${item.image}" width="40" height="40" alt="${item.name}" />
-        <span>${item.name}</span>
-        <span>$${item.price}</span>
-      </div>`;
-    },
+  .then(data => {
+    vs.updateData(data);
+    vs.hideLoading();
   });
-}
-
-loadList();
 ```
 
 ---
@@ -607,20 +568,22 @@ const vs = new HCGVirtualScroll(data, {
 
 ## Usage - UL List
 
-Use `<ul>` as the container. Each `renderItem` must return a `<li>`.
+Use `<ul>` or `<ol>` as the container. Each `renderItem` must return a `<li>`. The setup is the same for both - swap the tag and container id as needed.
 
 **HTML:**
 ```html
 <div style="height: 500px; overflow: hidden;">
-  <ul id="ulList" style="height: 100%; list-style: none; padding: 0; margin: 0;"></ul>
+  <ul id="ul-list" style="height: 100%; list-style: none; padding: 0; margin: 0;"></ul>
 </div>
+
+<!-- <ol id="ol-list" style="height:500px;overflow-y:auto;list-style:none;padding:0;margin:0;"></ol> -->
 ```
 
-> **Tip:** The scroll container must be the element you pass - wrap `<ul>` in a `<div>` if needed, or pass the `<ul>` directly and set `overflow-y: auto` on it via CSS.
+> **Tip:** The scroll container must be the element you pass to `container`. For `<ul>`, wrap it in a `<div>` and set `overflow-y: auto` on the list via CSS. For `<ol>`, you can pass the `<ol>` directly with `overflow-y: auto` inline as shown in the comment above.
 
 **CSS:**
 ```css
-#ulList {
+#ul-list {
   overflow-y: auto;
 }
 .list-item {
@@ -642,7 +605,7 @@ const fruits = Array.from({ length: 10000 }, (_, i) => ({
 }));
 
 const vs = new HCGVirtualScroll(fruits, {
-  container:  '#ulList',
+  container:  '#ul-list',
   itemHeight: 52,
   ariaLabel:  'Fruit list',
 
@@ -657,104 +620,121 @@ const vs = new HCGVirtualScroll(fruits, {
 
 ---
 
-## Usage - OL List
-
-Same as `<ul>` but with `<ol>`. Pass the `<ol>` as the container and return `<li>` from `renderItem`.
-
-**HTML:**
-```html
-<ol id="olList" style="height:500px;overflow-y:auto;list-style:none;padding:0;margin:0;"></ol>
-```
-
-**JavaScript:**
-```js
-const steps = Array.from({ length: 5000 }, (_, i) => ({
-  id:          i + 1,
-  title:       `Step ${i + 1}`,
-  description: `Details for step ${i + 1}.`,
-}));
-
-const vs = new HCGVirtualScroll(steps, {
-  container:  '#olList',
-  itemHeight: 64,
-
-  renderItem(item, index) {
-    return `<li style="
-        display:flex; align-items:center; gap:14px;
-        padding:10px 16px; border-bottom:1px solid #eee;
-        background:#fff; box-sizing:border-box;">
-      <span style="
-          width:30px; height:30px; border-radius:50%;
-          background:#2563eb; color:#fff;
-          display:flex; align-items:center; justify-content:center;
-          font-weight:700; font-size:.8rem; flex-shrink:0;">
-        ${item.id}
-      </span>
-      <div>
-        <div style="font-weight:600">${item.title}</div>
-        <div style="font-size:.8rem;color:#888">${item.description}</div>
-      </div>
-    </li>`;
-  },
-});
-```
-
----
-
 ## Usage - TABLE
 
 For tables, the **scroll container is a `<div>` that the library mounts on - never the `<table>` or `<tbody>`**. Place the header `<table>` above that scroll container, and render each row as its own small table that shares the same fixed column widths. This keeps valid markup and aligns every column with the header.
 
 > **Why not mount on `<tbody>`?** The library positions rows using an internal spacer element and a CSS transform, which require plain block elements. Those are not valid inside a `<table>` or `<tbody>` - the browser ejects them and the layout breaks. Rendering one small table per row avoids this and supports the full 1,000,000+ row range.
 
-**HTML** - the header sits above; the library mounts on the scroll container below:
-```html
-<!-- header row - same fixed column widths as the data rows -->
-<table style="width:100%;table-layout:fixed;">
-  <thead style="background:#f9fafb;">
-    <tr>
-      <th style="width:80px;padding:10px 14px;text-align:left">ID</th>
-      <th style="padding:10px 14px;text-align:left">Name</th>
-      <th style="padding:10px 14px;text-align:left">Email</th>
-      <th style="width:110px;padding:10px 14px;text-align:left">Status</th>
-    </tr>
-  </thead>
-</table>
+**CSS** - shared column widths, header background on the wrapper, and horizontal scroll on small screens:
 
-<!-- the scroll container the library mounts on -->
-<div id="tableScroll" style="height:500px;overflow-y:auto;"></div>
+```css
+.vs-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.vs-table-inner {
+  min-width: 520px;
+}
+
+#tableHeader {
+  width: 100%;
+  box-sizing: border-box;
+  background: #f9fafb;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+#tableHeader table,
+#tableScroll .hcg-vs-item > table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  box-sizing: border-box;
+}
+
+#tableHeader th,
+#tableScroll .hcg-vs-item td {
+  padding: 10px 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#tableHeader th.col-id,
+#tableScroll .hcg-vs-item td.col-id { width: 80px; color: #999; }
+
+#tableHeader th.col-status,
+#tableScroll .hcg-vs-item td.col-status { width: 110px; font-weight: 600; }
+
+@media (max-width: 600px) {
+  .vs-table-inner { min-width: 480px; }
+}
 ```
 
-**JavaScript** - each row returns a mini table using the same `table-layout: fixed` widths:
-```js
-const users = Array.from({ length: 100000 }, (_, i) => ({
-  id:     i + 1,
-  name:   `User ${i + 1}`,
-  email:  `user${i + 1}@example.com`,
-  status: i % 4 === 0 ? 'Inactive' : 'Active',
-}));
+**HTML** - header above the scroll container the library mounts on:
 
-const vs = new HCGVirtualScroll(users, {
+```html
+<link rel="stylesheet" href="hcg-virtual-scroll.css">
+
+<div class="vs-table-wrap">
+  <div class="vs-table-inner">
+    <div id="tableHeader">
+      <table>
+        <thead>
+          <tr>
+            <th class="col-id">ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th class="col-status">Status</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+    <div id="tableScroll" style="height:400px;overflow-y:auto;"></div>
+  </div>
+</div>
+
+<script src="hcg-virtual-scroll.js"></script>
+```
+
+**JavaScript:**
+
+```js
+function syncHeader() {
+  const list = document.getElementById('tableScroll');
+  const header = document.getElementById('tableHeader');
+  if (!list || !header) return;
+  header.style.paddingRight = (list.offsetWidth - list.clientWidth) + 'px';
+}
+
+const vs = new HCGVirtualScroll(rows, {
   container:  '#tableScroll',
   itemHeight: 44,
+  keyField:   'id',
 
   renderItem(item) {
     const color = item.status === 'Active' ? '#16a34a' : '#dc2626';
-    return `<table style="width:100%;border-collapse:collapse;table-layout:fixed;">
-      <tbody>
-        <tr style="border-bottom:1px solid #e5e7eb;">
-          <td style="width:80px;padding:10px 14px;color:#999">${item.id}</td>
-          <td style="padding:10px 14px;font-weight:500">${item.name}</td>
-          <td style="padding:10px 14px;color:#555">${item.email}</td>
-          <td style="width:110px;padding:10px 14px;color:${color};font-weight:600">${item.status}</td>
-        </tr>
-      </tbody>
-    </table>`;
+    return `<table><tr>
+      <td class="col-id">${item.id}</td>
+      <td>${item.name}</td>
+      <td>${item.email}</td>
+      <td class="col-status" style="color:${color}">${item.status}</td>
+    </tr></table>`;
   },
+
+  onResize() { syncHeader(); },
 });
+
+syncHeader();
+window.addEventListener('resize', syncHeader);
 ```
 
-> **Column alignment:** Use `table-layout: fixed` with matching `width` values on both the header `<th>` cells and each row's `<td>` cells. That is what keeps every column lined up with the header as you scroll.
+> **Column alignment:** Use `table-layout: fixed` with matching `width` values on both the header `<th>` cells and each row's `<td>` cells. That is what keeps every column lined up with the header as you scroll. Each rendered row is wrapped in `.hcg-vs-item` so the configured `itemHeight` is applied reliably.
+
+> **Small screens:** Wrap the header and scroll container in a shared `overflow-x: auto` parent with a `min-width` (for example `520px`) so columns stay readable on narrow viewports. Put the header background on the header wrapper (not `<thead>`) and set `padding-right` to the scrollbar width (`offsetWidth - clientWidth`) so columns align without a white gap beside the scrollbar.
 
 ---
 
@@ -1256,7 +1236,6 @@ hcg-virtual-scroll/
   hcg-virtual-scroll.js    Core library (class-based, no dependencies)
   hcg-virtual-scroll.css   Required styles
   index.html               Live demos (9 examples)
-  website-page.html        Full documentation page
   README.md                This file
   CHANGELOG.md             Version history
 ```
